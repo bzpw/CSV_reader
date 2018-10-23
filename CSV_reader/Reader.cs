@@ -9,11 +9,11 @@ using System.Data;
 
 namespace CSV_reader
 {
-    class Class3
+    class Reader
     {
         static void Main(string[] args)
         {
-
+            //ścieżka do pliku, nazwa DT
             var path = @"F:\_BZ\BTSy\btsearch.csv";
             DataTable dt = new DataTable("BTSearch");
 
@@ -27,18 +27,19 @@ namespace CSV_reader
                     csv.Read();
                     csv.ReadHeader();
                     
-                    
+                    //lista kolumn do zachowania
                     dt.Columns.Add(new DataColumn("siec_id", typeof(String)));
                     dt.Columns.Add(new DataColumn("miejscowosc", typeof(String)));
                     dt.Columns.Add(new DataColumn("standard", typeof(String)));
-                    dt.Columns.Add(new DataColumn("pasmo", typeof(String)));
-                    dt.Columns.Add(new DataColumn("ECID", typeof(String)));
-                    dt.Columns.Add(new DataColumn("eNBI", typeof(String)));
-                    dt.Columns.Add(new DataColumn("CLID", typeof(String)));
+                    dt.Columns.Add(new DataColumn("pasmo", typeof(Int32)));
+                    dt.Columns.Add(new DataColumn("ECID", typeof(Int32)));
+                    dt.Columns.Add(new DataColumn("eNBI", typeof(Int32)));
+                    dt.Columns.Add(new DataColumn("CLID", typeof(Int32)));
                     dt.Columns.Add(new DataColumn("LONGuke", typeof(String)));
                     dt.Columns.Add(new DataColumn("LATIuke", typeof(String)));
                     dt.Columns.Add(new DataColumn("StationId", typeof(String)));
 
+                    //zapisanie danych do DataTable
                     while (csv.Read())
                     {
                         var row = dt.NewRow();
@@ -48,11 +49,12 @@ namespace CSV_reader
                         }
                         dt.Rows.Add(row);
                     }
-
                     
+                    //wyświetl w konsoli
                     {
                         string data = string.Empty;
                         StringBuilder sb = new StringBuilder();
+                        int cnt = 0;
 
                         if (null != dt && null != dt.Rows)
                         {
@@ -64,15 +66,20 @@ namespace CSV_reader
                                     sb.Append(',');
                                 }
                                 sb.AppendLine();
+                                cnt++;
                             }
 
                             data = sb.ToString();
                             Console.WriteLine(sb);
+                            Console.WriteLine(cnt);
                         }
                         Console.ReadKey();
                     }
                 }
             }
+
+            //coś się tu będzie działo na DT
+
         }
     }
 }
