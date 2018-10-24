@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using CsvHelper;
 using System.Data;
 
@@ -88,18 +85,33 @@ namespace CSV_reader
                 }
             }
 
-            //coś się tu będzie działo na DT
-            int x = 0;
-            DataRow[] lte1800 = dt.Select("standard = 'LTE' AND pasmo = '1800' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')");
-            foreach (DataRow row in lte1800)
+            //!operacje na DT
+            //wybór niepustych stacji LTE1800
+            DataTable dt_lte18 = dt.Select("standard = 'LTE' AND pasmo = '1800' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')").CopyToDataTable();
             {
-                Console.WriteLine(row[0] + ",\t" + row[2] + ",\t" + row[3] + ",\t" + row[4] + ",\t" + row[5] + ",\t" + row[6]
-                    + ",\t" + row[7] + ",\t" + row[8] + ",\t" + row[9]);
-                x++;
-            }
-            Console.WriteLine(x);
-            Console.ReadKey();
+                string data = string.Empty;
+                StringBuilder sb = new StringBuilder();
+                int cnt = 0;
 
+                if (null != dt_lte18 && null != dt_lte18.Rows)
+                {
+                    foreach (DataRow dataRow in dt_lte18.Rows)
+                    {
+                        foreach (var item in dataRow.ItemArray)
+                        {
+                            sb.Append(item);
+                            sb.Append(',');
+                        }
+                        sb.AppendLine();
+                        cnt++;
+                    }
+
+                    data = sb.ToString();
+                    Console.WriteLine(sb);
+                    Console.WriteLine(cnt);
+                }
+                Console.ReadKey();
+            }
         }
     }
 }
