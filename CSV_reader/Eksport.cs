@@ -5,38 +5,90 @@ using System.Data;
 
 namespace CSV_reader
 {
-    class Eksport
+    class Exx
     {
 
-        public DataTable Eksport_pasmo(string stan, string pasm, DataTable base_dt)
+        public static DataTable Exx_23G(string stan, string pasm, DataTable base_dt)
         {
-            string eksp;
-            eksp = stan + pasm;
 
-            DataTable eksp_dt = base_dt.Select("standard = 'LTE' AND pasmo = '1800' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')").CopyToDataTable();
+            DataTable eksp_dt = new DataTable();
+            DataRow[] eksp_r = new DataRow[0];
 
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (LAC <> '' OR btsid <> '')");
+
+            if (eksp_r.Length > 0)
+            {
+                eksp_dt = eksp_r.CopyToDataTable();
+            }
+        
             //print *optional
-            /*{
-                string data = string.Empty;
-                StringBuilder sb = new StringBuilder();
+            {
+                //string data = string.Empty;
+                //StringBuilder sb = new StringBuilder();
                 int cnt = 0;
 
-                if (null != dt_lte18 && null != dt_lte18.Rows)
+                if (null != eksp_dt && null != eksp_dt.Rows)
                 {
-                    foreach (DataRow dataRow in dt_lte18.Rows)
+                    foreach (DataRow dataRow in eksp_dt.Rows)
                     {
-                        foreach (var item in dataRow.ItemArray)
+                        /*foreach (var item in dataRow.ItemArray)
                         {
                             sb.Append(item);
                             sb.Append(',');
-                        }
-                        sb.AppendLine();
+                        }*/
+                        //sb.AppendLine();
                         cnt++;
                     }
-
-                    data = sb.ToString();
+                    //data = sb.ToString();
+                    //Console.WriteLine(sb);
+                    Console.WriteLine(cnt);
+                    Console.WriteLine();
                 }
-            }*/
+            }
+            //Console.ReadKey();
+
+            return eksp_dt;
+        }
+
+
+        public static DataTable Exx_4G(string stan, string pasm, DataTable base_dt)
+        {
+
+            DataTable eksp_dt = new DataTable();
+            DataRow[] eksp_r = new DataRow[0];
+
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')");
+
+            if (eksp_r.Length > 0)
+            {
+                eksp_dt = eksp_r.CopyToDataTable();
+            }
+
+            //print *optional
+            {
+                //string data = string.Empty;
+                //StringBuilder sb = new StringBuilder();
+                int cnt = 0;
+
+                if (null != eksp_dt && null != eksp_dt.Rows)
+                {
+                    foreach (DataRow dataRow in eksp_dt.Rows)
+                    {
+                        /*foreach (var item in dataRow.ItemArray)
+                        {
+                            sb.Append(item);
+                            sb.Append(',');
+                        }*/
+                        //sb.AppendLine();
+                        cnt++;
+                    }
+                    //data = sb.ToString();
+                    //Console.WriteLine(sb);
+                    Console.WriteLine(cnt);
+                    Console.WriteLine();
+                }
+            }
+            //Console.ReadKey();
 
             return eksp_dt;
         }

@@ -29,6 +29,8 @@ namespace CSV_reader
                     dt.Columns.Add(new DataColumn("miejscowosc", typeof(String)));
                     dt.Columns.Add(new DataColumn("standard", typeof(String)));
                     dt.Columns.Add(new DataColumn("pasmo", typeof(String)));
+                    dt.Columns.Add(new DataColumn("lac", typeof(String)));
+                    dt.Columns.Add(new DataColumn("btsid", typeof(String)));
                     dt.Columns.Add(new DataColumn("ECID", typeof(String)));
                     dt.Columns.Add(new DataColumn("eNBI", typeof(String)));
                     dt.Columns.Add(new DataColumn("CLID", typeof(String)));
@@ -79,6 +81,7 @@ namespace CSV_reader
                             data = sb.ToString();
                             Console.WriteLine(sb);
                             Console.WriteLine(cnt);
+                            Console.WriteLine();
                         }
                         Console.ReadKey();
                     }
@@ -87,7 +90,7 @@ namespace CSV_reader
 
             //!operacje na DT
             //wybór niepustych stacji LTE1800
-            DataTable dt_lte18 = dt.Select("standard = 'LTE' AND pasmo = '1800' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')").CopyToDataTable();
+            /*DataTable dt_lte18 = dt.Select("standard = 'LTE' AND pasmo = '1800' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')").CopyToDataTable();
             {
                 string data = string.Empty;
                 StringBuilder sb = new StringBuilder();
@@ -111,7 +114,25 @@ namespace CSV_reader
                     Console.WriteLine(cnt);
                 }
                 Console.ReadKey();
-            }
+            }*/
+
+            DataTable cdma42 = Exx.Exx_23G("CDMA", "420", dt); //brak w btsearch
+            DataTable cdma45 = Exx.Exx_23G("CDMA", "450", dt); //brak w btsearch 
+            DataTable gsm18 = Exx.Exx_23G("GSM", "1800", dt); //potrzebny LAC i CID (jak rozszyfrować cid?)
+            DataTable gsm9 = Exx.Exx_23G("GSM", "900", dt); //potrzebny LAC i CID (jak rozszyfrować cid?)
+            DataTable gsm9e = Exx.Exx_23G("E-GSM", "900", dt); //potrzebny LAC i CID (jak rozszyfrować cid?) -> CID = btsid --ostatnia cyfra (z jednej z kolumn cid*)
+            DataTable lte18 = Exx.Exx_4G("LTE", "1800", dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte21 = Exx.Exx_4G("LTE", "2100", dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte26 = Exx.Exx_4G("LTE", "2600", dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte8 = Exx.Exx_4G("LTE", "800", dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte9 = Exx.Exx_4G("LTE", "900", dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable umts18 = Exx.Exx_23G("UMTS", "1800", dt); //potrzebny LAC i CID (jak rozszyfrować cid?)
+            DataTable umts21 = Exx.Exx_23G("UMTS", "2100", dt); //potrzebny LAC i CID (jak rozszyfrować cid?)
+            DataTable umts9 = Exx.Exx_23G("UMTS", "900", dt); //potrzebny LAC i CID (jak rozszyfrować cid?)
+
+            dt.Dispose();
+            Console.ReadKey();
+
         }
     }
 }
