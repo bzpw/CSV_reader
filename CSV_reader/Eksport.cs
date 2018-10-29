@@ -22,7 +22,7 @@ namespace CSV_reader
             }
         
             //print *optional
-            {
+            /*{
                 //string data = string.Empty;
                 //StringBuilder sb = new StringBuilder();
                 int cnt = 0;
@@ -31,11 +31,11 @@ namespace CSV_reader
                 {
                     foreach (DataRow dataRow in eksp_dt.Rows)
                     {
-                        /*foreach (var item in dataRow.ItemArray)
+                        foreach (var item in dataRow.ItemArray)
                         {
                             sb.Append(item);
                             sb.Append(',');
-                        }*/
+                        }
                         //sb.AppendLine();
                         cnt++;
                     }
@@ -44,7 +44,7 @@ namespace CSV_reader
                     Console.WriteLine(cnt);
                     Console.WriteLine();
                 }
-            }
+            }*/
             //Console.ReadKey();
 
             return eksp_dt;
@@ -65,7 +65,7 @@ namespace CSV_reader
             }
 
             //print *optional
-            {
+            /*{
                 //string data = string.Empty;
                 //StringBuilder sb = new StringBuilder();
                 int cnt = 0;
@@ -74,11 +74,11 @@ namespace CSV_reader
                 {
                     foreach (DataRow dataRow in eksp_dt.Rows)
                     {
-                        /*foreach (var item in dataRow.ItemArray)
+                        foreach (var item in dataRow.ItemArray)
                         {
                             sb.Append(item);
                             sb.Append(',');
-                        }*/
+                        }
                         //sb.AppendLine();
                         cnt++;
                     }
@@ -87,7 +87,7 @@ namespace CSV_reader
                     Console.WriteLine(cnt);
                     Console.WriteLine();
                 }
-            }
+            }*/
             //Console.ReadKey();
 
             return eksp_dt;
