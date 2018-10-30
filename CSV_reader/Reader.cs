@@ -4,6 +4,7 @@ using System.Text;
 using CsvHelper;
 using System.Data;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace CSV_reader
 {
@@ -13,85 +14,13 @@ namespace CSV_reader
         {
             //Stopwatch stopwatch = Stopwatch.StartNew();
             //ścieżka do pliku, nazwa DT
-            var path = @"F:\_BZ\BTSy\btsearch.csv";
-            DataTable dt = new DataTable("BTSearch");
+            string path = @"F:\_BZ\BTSy\btsearch.csv";
 
-            if (File.Exists(path))
-            {
-
-
-                using (StreamReader sr = new StreamReader(path, Encoding.UTF8))
-                {
-                    using (var csv = new CsvReader(sr))
-                    {
-                        csv.Configuration.Delimiter = ";";
-                        csv.Configuration.HasHeaderRecord = true;
-                        csv.Read();
-                        csv.ReadHeader();
-
-                        //lista kolumn do zachowania
-                        dt.Columns.Add(new DataColumn("siec_id", typeof(String)));
-                        dt.Columns.Add(new DataColumn("miejscowosc", typeof(String)));
-                        dt.Columns.Add(new DataColumn("standard", typeof(String)));
-                        dt.Columns.Add(new DataColumn("pasmo", typeof(String)));
-                        dt.Columns.Add(new DataColumn("lac", typeof(String)));
-                        dt.Columns.Add(new DataColumn("btsid", typeof(String)));
-                        dt.Columns.Add(new DataColumn("ECID", typeof(String)));
-                        dt.Columns.Add(new DataColumn("eNBI", typeof(String)));
-                        dt.Columns.Add(new DataColumn("CLID", typeof(String)));
-                        dt.Columns.Add(new DataColumn("LONGuke", typeof(String)));
-                        dt.Columns.Add(new DataColumn("LATIuke", typeof(String)));
-                        dt.Columns.Add(new DataColumn("StationId", typeof(String)));
-
-                        //zapisanie danych do DataTable
-                        while (csv.Read())
-                        {
-                            var row = dt.NewRow();
-                            foreach (DataColumn column in dt.Columns)
-                            {
-                                row[column.ColumnName] = csv.GetField(column.DataType, column.ColumnName);
-                            }
-                            dt.Rows.Add(row);
-                        }
-                        Operations.Coords_fix(dt);
-
-                        //wyświetl w konsoli
-                        {
-                            //string data = string.Empty;
-                            //StringBuilder sb = new StringBuilder();
-                            int cnt = 0;
-
-                            if (null != dt && null != dt.Rows)
-                            {
-                                foreach (DataRow dataRow in dt.Rows)
-                                {
-                                    //foreach (var item in dataRow.ItemArray)
-                                    //{
-                                    //    sb.Append(item);
-                                    //    sb.Append(',');
-                                    //}
-                                    //sb.AppendLine();
-                                    cnt++;
-                                }
-
-                                //data = sb.ToString();
-                                //Console.WriteLine(sb);
-                                Console.WriteLine(cnt);
-                                Console.WriteLine();
-                            }
-                            //Console.ReadKey();
-                            Console.WriteLine();
-                        }
-
-                    }
-                }
-            }
-
+            //DataTable dt = Operations.ReadBTS(path);
+            DataTable dtu = Operations.ReadUKE(@"F:\_BZ\BTSy\lte1800_-_stan_na_2018-03-26.xlsx");
             //!operacje na DT
 
-
-
-            DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
+            /*DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
             DataTable cdma45 = Operations.Sel_23G("CDMA", "450", dt); //brak w btsearch 
             DataTable gsm18 = Operations.Sel_23G("GSM", "1800", dt); //potrzebny LAC i CID
             DataTable gsm9 = Operations.Sel_23G("GSM", "900", dt); //potrzebny LAC i CID
@@ -105,7 +34,6 @@ namespace CSV_reader
             DataTable umts21 = Operations.Sel_23G("UMTS", "2100", dt); //potrzebny LAC i CID
             DataTable umts9 = Operations.Sel_23G("UMTS", "900", dt); //potrzebny LAC i CID
 
-            
             DataTable AllBts = new DataTable();
             AllBts.Merge(cdma42);
             AllBts.Merge(cdma45);
@@ -121,40 +49,19 @@ namespace CSV_reader
             AllBts.Merge(umts21);
             AllBts.Merge(umts9);
 
-
-            dt.Dispose();
+            dt.Dispose();*/
             //stopwatch.Stop();
             //Console.WriteLine("Czas: " + stopwatch.ElapsedMilliseconds);
             //Console.ReadKey();
 
-            /*{
-                string data = string.Empty;
-                StringBuilder sb = new StringBuilder();
-                int cnt = 0;
+            //zapis na konsole
+            //Operations.PrintToConsole(dt);
 
-                if (null != AllBts && null != AllBts.Rows)
-                {
-                    foreach (DataRow dataRow in AllBts.Rows)
-                    {
-                        foreach (var item in dataRow.ItemArray)
-                        {
-                            sb.Append(item);
-                            sb.Append(", ");
-                        }
-                        sb.AppendLine();
-                        cnt++;
-                    }
+            //string respath = @"F:\_BZ\BTSy\CSV_reader.csv";
+            string respathu = @"F:\_BZ\BTSy\UKE_reader.csv";
+            //Operations.SaveToCSV(AllBts, respath);
+            Operations.SaveToCSV(dtu, respathu);
 
-                    data = sb.ToString();
-                    Console.WriteLine(sb);
-                    Console.WriteLine(cnt);
-                    Console.WriteLine();
-                }
-            //Console.ReadKey();
-
-            }*/
-            string respath = @"F:\_BZ\BTSy\CSV_reader.csv";
-            Operations.SaveToCSV(AllBts, respath);
         }
     }
 }

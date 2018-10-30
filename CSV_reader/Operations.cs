@@ -5,11 +5,149 @@ using System.Data;
 using System.Collections.Generic;
 using System.Linq;
 using CsvHelper;
+using ExcelDataReader;
 
 namespace CSV_reader
 {
     class Operations
     {
+        public static DataTable ReadBTS(string path)
+        {
+            DataTable dt = new DataTable("BTSearch");
+
+            if (File.Exists(path))
+            {
+
+
+                using (StreamReader sr = new StreamReader(path, Encoding.UTF8))
+                {
+                    using (var csv = new CsvReader(sr))
+                    {
+                        csv.Configuration.Delimiter = ";";
+                        csv.Configuration.HasHeaderRecord = true;
+                        csv.Read();
+                        csv.ReadHeader();
+
+                        //lista kolumn do zachowania
+                        dt.Columns.Add(new DataColumn("siec_id", typeof(String)));
+                        dt.Columns.Add(new DataColumn("miejscowosc", typeof(String)));
+                        dt.Columns.Add(new DataColumn("standard", typeof(String)));
+                        dt.Columns.Add(new DataColumn("pasmo", typeof(String)));
+                        dt.Columns.Add(new DataColumn("lac", typeof(String)));
+                        dt.Columns.Add(new DataColumn("btsid", typeof(String)));
+                        dt.Columns.Add(new DataColumn("ECID", typeof(String)));
+                        dt.Columns.Add(new DataColumn("eNBI", typeof(String)));
+                        dt.Columns.Add(new DataColumn("CLID", typeof(String)));
+                        dt.Columns.Add(new DataColumn("LONGuke", typeof(String)));
+                        dt.Columns.Add(new DataColumn("LATIuke", typeof(String)));
+                        dt.Columns.Add(new DataColumn("StationId", typeof(String)));
+
+                        //zapisanie danych do DataTable
+                        while (csv.Read())
+                        {
+                            var row = dt.NewRow();
+                            foreach (DataColumn column in dt.Columns)
+                            {
+                                row[column.ColumnName] = csv.GetField(column.DataType, column.ColumnName);
+                            }
+                            dt.Rows.Add(row);
+                        }
+                        Operations.Coords_fix(dt);
+
+                        //zapis na konsole
+                        //PrintToConsole(dt);
+
+                    }
+                }
+            }
+            return dt;
+        }
+
+
+        public static DataTable ReadUKE(string path)
+        {
+            DataTable dt = new DataTable("UKE");
+            dt.Columns.Add(new DataColumn("Operator", typeof(String)));
+            dt.Columns.Add(new DataColumn("NrDecyzji", typeof(String)));
+            dt.Columns.Add(new DataColumn("DlGeogr", typeof(String)));
+            dt.Columns.Add(new DataColumn("SzGeogr", typeof(String)));
+            dt.Columns.Add(new DataColumn("Miejscowosc", typeof(String)));
+            dt.Columns.Add(new DataColumn("Lokalizacja", typeof(String)));
+            dt.Columns.Add(new DataColumn("IdStacji", typeof(String)));
+
+
+            //foreach (string path in paths)
+            //{
+                if (File.Exists(path))
+                {
+
+                    using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+                    {
+                        IExcelDataReader reader;
+                        reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream);
+                        var conf = new ExcelDataSetConfiguration
+                        {
+                            UseColumnDataType = true,
+                            ConfigureDataTable = _ => new ExcelDataTableConfiguration
+                            {
+                                UseHeaderRow = false
+                            }
+                        };
+                        var dataSet = reader.AsDataSet(conf);
+                        DataTable dataTable = dataSet.Tables[0];
+
+                        foreach (DataRow dr in dataTable.Rows)
+                        {
+                            DataRow ndr = dt.NewRow();
+                            ndr["Operator"] = dr[0];
+                            ndr["NrDecyzji"] = dr[1];
+                            ndr["DlGeogr"] = dr[4];
+                            ndr["SzGeogr"] = dr[5];
+                            ndr["Miejscowosc"] = dr[6];
+                            ndr["Lokalizacja"] = dr[7];
+                            ndr["IdStacji"] = dr[8];
+                            dt.Rows.Add(ndr);
+                        }
+
+                        //zapis na konsole
+                        PrintToConsole(dt);
+                    }
+            //    }
+
+            }
+            return dt;
+        }
+
+        public static void PrintToConsole(DataTable dt)
+        {
+            //wyświetl w konsoli
+            {
+                string data = string.Empty;
+                StringBuilder sb = new StringBuilder();
+                int cnt = 0;
+
+                if (null != dt && null != dt.Rows)
+                {
+                    foreach (DataRow dataRow in dt.Rows)
+                    {
+                        foreach (var item in dataRow.ItemArray)
+                        {
+                            sb.Append(item);
+                            sb.Append(',');
+                        }
+                        sb.AppendLine();
+                        cnt++;
+                    }
+
+                    data = sb.ToString();
+                    Console.WriteLine(sb);
+                    Console.WriteLine(cnt);
+                    Console.WriteLine();
+                }
+                Console.ReadKey();
+                Console.WriteLine();
+            }
+        }
 
         public static DataTable Sel_23G(string stan, string pasm, DataTable base_dt)
         {
@@ -23,32 +161,9 @@ namespace CSV_reader
             {
                 eksp_dt = eksp_r.CopyToDataTable();
             }
-        
-            //print *optional
-            {
-                //string data = string.Empty;
-                //StringBuilder sb = new StringBuilder();
-                int cnt = 0;
 
-                if (null != eksp_dt && null != eksp_dt.Rows)
-                {
-                    foreach (DataRow dataRow in eksp_dt.Rows)
-                    {
-                        //foreach (var item in dataRow.ItemArray)
-                        //{
-                        //    sb.Append(item);
-                        //    sb.Append(',');
-                        //}
-                        //sb.AppendLine();
-                        cnt++;
-                    }
-                    //data = sb.ToString();
-                    //Console.WriteLine(sb);
-                    Console.WriteLine(cnt);
-                    Console.WriteLine();
-                }
-            }
-            //Console.ReadKey();
+            //zapis na konsole
+            //PrintToConsole(eksp_dt);
 
             return eksp_dt;
         }
@@ -67,31 +182,8 @@ namespace CSV_reader
                 eksp_dt = eksp_r.CopyToDataTable();
             }
 
-            //print *optional
-            {
-                //string data = string.Empty;
-                //StringBuilder sb = new StringBuilder();
-                int cnt = 0;
-
-                if (null != eksp_dt && null != eksp_dt.Rows)
-                {
-                    foreach (DataRow dataRow in eksp_dt.Rows)
-                    {
-                        //foreach (var item in dataRow.ItemArray)
-                        //{
-                        //    sb.Append(item);
-                        //    sb.Append(',');
-                        //}
-                        //sb.AppendLine();
-                        cnt++;
-                    }
-                    //data = sb.ToString();
-                    //Console.WriteLine(sb);
-                    Console.WriteLine(cnt);
-                    Console.WriteLine();
-                }
-            }
-            //Console.ReadKey();
+            //zapis na konsole
+            //PrintToConsole(eksp_dt);
 
             return eksp_dt;
         }
@@ -102,10 +194,10 @@ namespace CSV_reader
 
             DataRow[] dr = base_dt.Select("LONGuke <> '' AND LATIuke <> ''");
 
-            for(int i=0; i<dr.Length; i++)
+            for (int i = 0; i < dr.Length; i++)
             {
-                llong = dr[i]["LONGuke"].ToString().Replace('E', ',');
-                llati = dr[i]["LATIuke"].ToString().Replace('N', ',');
+                llong = dr[i]["LONGuke"].ToString().Replace('E', '.');
+                llati = dr[i]["LATIuke"].ToString().Replace('N', '.');
 
                 dr[i]["LONGuke"] = llong;
                 dr[i]["LATIuke"] = llati;
@@ -130,7 +222,7 @@ namespace CSV_reader
                     Console.WriteLine(e.Message);
                     return;
                 }
-            }            
+            }
 
             using (var textWriter = File.CreateText(path))
             using (var csv = new CsvWriter(textWriter))
@@ -155,5 +247,7 @@ namespace CSV_reader
             }
 
         }
+
+
     }
 }
