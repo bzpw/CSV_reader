@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CsvHelper;
 using ExcelDataReader;
+using System.Net;
 
 namespace CSV_reader
 {
@@ -63,7 +64,7 @@ namespace CSV_reader
         }
 
 
-        public static DataTable ReadUKE(string[] paths)
+        public static DataTable ReadUKE(List<string> urls)
         {
             //DataTable uke = new DataTable("UKE");
             DataTable dt = new DataTable("UKE");
@@ -75,12 +76,26 @@ namespace CSV_reader
             dt.Columns.Add(new DataColumn("Lokalizacja", typeof(String)));
             dt.Columns.Add(new DataColumn("IdStacji", typeof(String)));
 
+            Directory.CreateDirectory(@"F:\_BZ\BTSy\DL_UKE\");
+
+            foreach (string url in urls)
+            {
+                using (WebClient wc = new WebClient())
+                {
+                    wc.DownloadFileAsync(
+                        // Param1 = Link of file
+                        new System.Uri(url),
+                        // Param2 = Path to save
+                        @"F:\_BZ\BTSy\DL_UKE\" + url.Substring(69));
+                }
+            }
+
+            string[] paths = Directory.GetFiles(@"F:\_BZ\BTSy\2018-03-26");
 
             foreach (string path in paths)
             {
                 if (File.Exists(path))
                 {
-
                     using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
                     {
                         IExcelDataReader reader;
@@ -158,7 +173,7 @@ namespace CSV_reader
             DataTable eksp_dt = new DataTable();
             DataRow[] eksp_r = new DataRow[0];
 
-            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (LAC is not null OR btsid is not null)");
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (lac <> '' AND btsid <> '')");
 
             if (eksp_r.Length > 0)
             {
@@ -208,7 +223,7 @@ namespace CSV_reader
 
             base_dt = dr.CopyToDataTable();
             return base_dt;
-        }
+            }
 
         public static DataTable Coords_fixu(DataTable base_dt)
         {

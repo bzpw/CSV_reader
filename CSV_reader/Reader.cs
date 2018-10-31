@@ -15,14 +15,28 @@ namespace CSV_reader
             Stopwatch stopwatch = Stopwatch.StartNew();
             //ścieżka do pliku, nazwa DT
             string path = @"F:\_BZ\BTSy\btsearch.csv";
-            string[] paths = Directory.GetFiles(@"F:\_BZ\BTSy\2018-03-26");
+            //string[] paths = Directory.GetFiles(@"F:\_BZ\BTSy\2018-03-26");
+            List<string> pathx = new List<string>();
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/cdma420_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/cdma450_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/gsm1800_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/gsm900_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/lte1800_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/lte2100_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/lte2600_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/lte800_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/lte900_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/umts1800_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/umts2100_-_stan_na_2018-03-26.xlsx");
+            pathx.Add("https://bip.uke.gov.pl/download/gfx/bip/pl/defaultaktualnosci/28/5/2/umts900_-_stan_na_2018-03-26.xlsx");
+            //string[] paths = pathx.ToArray();
 
 
-            DataTable dt = Operations.ReadBTS(path);
-            DataTable dtu = Operations.ReadUKE(paths);
+            //DataTable dt = Operations.ReadBTS(path);
+            DataTable dtu = Operations.ReadUKE(pathx);
 
             //!operacje na DT
-            DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
+            /*DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
             DataTable cdma45 = Operations.Sel_23G("CDMA", "450", dt); //brak w btsearch 
             DataTable gsm18 = Operations.Sel_23G("GSM", "1800", dt); //potrzebny LAC i CID
             DataTable gsm9 = Operations.Sel_23G("GSM", "900", dt); //potrzebny LAC i CID
@@ -49,9 +63,9 @@ namespace CSV_reader
             AllBts.Merge(lte9);
             AllBts.Merge(umts18);
             AllBts.Merge(umts21);
-            AllBts.Merge(umts9);
+            AllBts.Merge(umts9);*/
 
-            dt.Dispose();
+            //dt.Dispose();
             //stopwatch.Stop();
             //Console.WriteLine("Czas: " + stopwatch.ElapsedMilliseconds);
             //Console.ReadKey();
@@ -61,7 +75,7 @@ namespace CSV_reader
 
             string respath = @"F:\_BZ\BTSy\CSV_reader.csv";
             string respathu = @"F:\_BZ\BTSy\UKE_reader.csv";
-            Operations.SaveToCSV(AllBts, respath);
+            //Operations.SaveToCSV(AllBts, respath);
             Operations.SaveToCSV(dtu, respathu);
 
             stopwatch.Stop();
