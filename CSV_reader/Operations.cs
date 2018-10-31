@@ -17,8 +17,7 @@ namespace CSV_reader
 
             if (File.Exists(path))
             {
-
-
+                
                 using (StreamReader sr = new StreamReader(path, Encoding.UTF8))
                 {
                     using (var csv = new CsvReader(sr))
@@ -64,8 +63,9 @@ namespace CSV_reader
         }
 
 
-        public static DataTable ReadUKE(string path)
+        public static DataTable ReadUKE(string[] paths)
         {
+            //DataTable uke = new DataTable("UKE");
             DataTable dt = new DataTable("UKE");
             dt.Columns.Add(new DataColumn("Operator", typeof(String)));
             dt.Columns.Add(new DataColumn("NrDecyzji", typeof(String)));
@@ -76,8 +76,8 @@ namespace CSV_reader
             dt.Columns.Add(new DataColumn("IdStacji", typeof(String)));
 
 
-            //foreach (string path in paths)
-            //{
+            foreach (string path in paths)
+            {
                 if (File.Exists(path))
                 {
 
@@ -90,7 +90,8 @@ namespace CSV_reader
                             UseColumnDataType = true,
                             ConfigureDataTable = _ => new ExcelDataTableConfiguration
                             {
-                                UseHeaderRow = false
+                                UseHeaderRow = false,
+                                FilterRow = rowReader => rowReader.Depth > 1
                             }
                         };
                         var dataSet = reader.AsDataSet(conf);
@@ -108,15 +109,17 @@ namespace CSV_reader
                             ndr["IdStacji"] = dr[8];
                             dt.Rows.Add(ndr);
                         }
-
-                        //zapis na konsole
-                        PrintToConsole(dt);
                     }
-            //    }
+
+                    Coords_fixu(dt);
+                    //zapis na konsole
+                    //PrintToConsole(dt);
+                }
 
             }
             return dt;
         }
+
 
         public static void PrintToConsole(DataTable dt)
         {
@@ -144,8 +147,8 @@ namespace CSV_reader
                     Console.WriteLine(cnt);
                     Console.WriteLine();
                 }
-                Console.ReadKey();
-                Console.WriteLine();
+                //Console.ReadKey();
+                //Console.WriteLine();
             }
         }
 
@@ -155,7 +158,7 @@ namespace CSV_reader
             DataTable eksp_dt = new DataTable();
             DataRow[] eksp_r = new DataRow[0];
 
-            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (LAC <> '' OR btsid <> '')");
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (LAC is not null OR btsid is not null)");
 
             if (eksp_r.Length > 0)
             {
@@ -204,13 +207,35 @@ namespace CSV_reader
             }
 
             base_dt = dr.CopyToDataTable();
-
             return base_dt;
         }
 
+        public static DataTable Coords_fixu(DataTable base_dt)
+        {
+            string llong, llati;
+
+            DataRow[] dr = base_dt.Select("DlGeogr <> '' AND SzGeogr <> ''");
+
+            for (int i = 0; i < dr.Length; i++)
+            {
+                llong = dr[i]["DlGeogr"].ToString().Replace('E', '.');
+                llong = llong.Replace("\'", "");
+                llong = llong.TrimEnd('\"');
+                llati = dr[i]["SzGeogr"].ToString().Replace('N', '.');
+                llati = llati.TrimEnd('\"');
+                llati = llati.Replace("\'", "");
+
+                dr[i]["DlGeogr"] = llong;
+                dr[i]["SzGeogr"] = llati;
+            }
+
+            base_dt = dr.CopyToDataTable();
+            return base_dt;
+        }
+
+
         public static void SaveToCSV(DataTable dt, string path)
         {
-            //var origin = @"F:\_BZ\BTSy\CSV_reader.csv";
             if (File.Exists(path))
             {
                 try
@@ -224,7 +249,8 @@ namespace CSV_reader
                 }
             }
 
-            using (var textWriter = File.CreateText(path))
+            //using (var textWriter = File.CreateText(path))
+            using (var textWriter = new StreamWriter(path, false, Encoding.UTF8))
             using (var csv = new CsvWriter(textWriter))
             {
                 // Write columns
