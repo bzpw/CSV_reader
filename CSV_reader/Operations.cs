@@ -175,7 +175,7 @@ namespace CSV_reader
             DataTable eksp_dt = new DataTable();
             DataRow[] eksp_r = new DataRow[0];
 
-            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (lac <> '' AND btsid <> '')");
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (lac <> '' AND btsid <> '' AND lac IS NOT NULL AND btsid IS NOT NULL)");
 
             if (eksp_r.Length > 0)
             {
@@ -195,7 +195,7 @@ namespace CSV_reader
             DataTable eksp_dt = new DataTable();
             DataRow[] eksp_r = new DataRow[0];
 
-            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (ECID <> '' OR eNBI <> '' OR CLID <> '')");
+            eksp_r = base_dt.Select("standard = '" + stan + "' AND pasmo = '" + pasm + "' AND (ECID <> '' AND eNBI <> '' AND CLID <> '')");
 
             if (eksp_r.Length > 0)
             {
@@ -212,7 +212,7 @@ namespace CSV_reader
         {
             string llong, llati;
 
-            DataRow[] dr = base_dt.Select("LONGuke <> '' AND LATIuke <> ''");
+            DataRow[] dr = base_dt.Select("LONGuke <> '' AND LATIuke <> '' AND LONGuke IS NOT NULL AND LATIuke IS NOT NULL");
 
             for (int i = 0; i < dr.Length; i++)
             {
@@ -231,7 +231,7 @@ namespace CSV_reader
         {
             string llong, llati;
 
-            DataRow[] dr = base_dt.Select("DlGeogr <> '' AND SzGeogr <> ''");
+            DataRow[] dr = base_dt.Select("DlGeogr <> '' AND SzGeogr <> '' AND DlGeogr IS NOT NULL AND SzGeogr IS NOT NULL");
 
             for (int i = 0; i < dr.Length; i++)
             {
