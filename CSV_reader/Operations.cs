@@ -7,6 +7,8 @@ using System.Linq;
 using CsvHelper;
 using ExcelDataReader;
 using System.Net;
+using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace CSV_reader
 {
@@ -76,28 +78,24 @@ namespace CSV_reader
             dt.Columns.Add(new DataColumn("Lokalizacja", typeof(String)));
             dt.Columns.Add(new DataColumn("IdStacji", typeof(String)));
 
-            Directory.CreateDirectory(@"F:\_BZ\BTSy\DL_UKE\");
+            var dir = @"C:\Temp\DL_UKE\";
+            //var dir = @"F:\_BZ\BTSy\DL_UKE\";
+            Directory.CreateDirectory(dir);
 
             foreach (string url in urls)
             {
-                using (WebClient wc = new WebClient())
-                {
-                    wc.DownloadFileAsync(
-                        // Param1 = Link of file
-                        new System.Uri(url),
-                        // Param2 = Path to save
-                        @"F:\_BZ\BTSy\DL_UKE\" + url.Substring(69));
-                }
+                WebFeatures.DLu(dir, url);
             }
 
-            string[] paths = Directory.GetFiles(@"F:\_BZ\BTSy\2018-03-26");
+            string[] paths = Directory.GetFiles(dir);
 
             foreach (string path in paths)
             {
                 if (File.Exists(path))
                 {
-                    using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+                    using (FileStream stream = File.Open(path, FileMode.Open, FileAccess.Read))
                     {
+                        Console.WriteLine("Opened: " + path);
                         IExcelDataReader reader;
                         reader = ExcelDataReader.ExcelReaderFactory.CreateReader(stream);
                         var conf = new ExcelDataSetConfiguration
@@ -125,16 +123,20 @@ namespace CSV_reader
                             dt.Rows.Add(ndr);
                         }
                     }
-
-                    Coords_fixu(dt);
-                    //zapis na konsole
-                    //PrintToConsole(dt);
                 }
 
             }
+            Coords_fixu(dt);
+            /*foreach (string path in paths)
+            {
+                File.Delete(path);
+                Console.WriteLine("File deleted.");
+                System.Threading.Thread.Sleep(50);
+            }
+            Directory.Delete(dir);*/
+
             return dt;
         }
-
 
         public static void PrintToConsole(DataTable dt)
         {
