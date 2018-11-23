@@ -29,9 +29,14 @@ namespace CSV_reader
                         csv.Configuration.HasHeaderRecord = true;
                         csv.Read();
                         csv.ReadHeader();
+                        List<string> headers = csv.Context.HeaderRecord.ToList();
+                        foreach (string header in headers)
+                        {
+                            dt.Columns.Add(new DataColumn(header));
+                        }
 
                         //lista kolumn do zachowania
-                        dt.Columns.Add(new DataColumn("siec_id", typeof(String)));
+                        /*dt.Columns.Add(new DataColumn("siec_id", typeof(String)));
                         dt.Columns.Add(new DataColumn("miejscowosc", typeof(String)));
                         dt.Columns.Add(new DataColumn("standard", typeof(String)));
                         dt.Columns.Add(new DataColumn("pasmo", typeof(String)));
@@ -42,8 +47,8 @@ namespace CSV_reader
                         dt.Columns.Add(new DataColumn("CLID", typeof(String)));
                         dt.Columns.Add(new DataColumn("LONGuke", typeof(String)));
                         dt.Columns.Add(new DataColumn("LATIuke", typeof(String)));
-                        dt.Columns.Add(new DataColumn("StationId", typeof(String)));
-
+                        dt.Columns.Add(new DataColumn("StationId", typeof(String)));*/
+                                                
                         //zapisanie danych do DataTable
                         while (csv.Read())
                         {
@@ -54,7 +59,9 @@ namespace CSV_reader
                             }
                             dt.Rows.Add(row);
                         }
+                        Console.WriteLine("csv.Read");
                         Operations.Coords_fix(dt);
+                        Console.WriteLine("Coords_fix");
 
                         //zapis na konsole
                         //PrintToConsole(dt);
@@ -169,7 +176,7 @@ namespace CSV_reader
             }
         }
 
-        public static DataTable Sel_23G(string stan, string pasm, DataTable base_dt)
+        public static DataTable Sel_23G(string stan, string pasm, ref DataTable base_dt)
         {
 
             DataTable eksp_dt = new DataTable();
@@ -184,12 +191,15 @@ namespace CSV_reader
 
             //zapis na konsole
             //PrintToConsole(eksp_dt);
-
+            //base_dt.Clear();
+            //base_dt.Dispose();
+            //base_dt = null;
+            Console.WriteLine("Sel_23G");
             return eksp_dt;
         }
 
 
-        public static DataTable Sel_4G(string stan, string pasm, DataTable base_dt)
+        public static DataTable Sel_4G(string stan, string pasm, ref DataTable base_dt)
         {
 
             DataTable eksp_dt = new DataTable();
@@ -204,7 +214,10 @@ namespace CSV_reader
 
             //zapis na konsole
             //PrintToConsole(eksp_dt);
-
+            //base_dt.Clear();
+            //base_dt.Dispose();
+            //base_dt = null;
+            Console.WriteLine("Sel_4G");
             return eksp_dt;
         }
 
@@ -251,6 +264,47 @@ namespace CSV_reader
         }
 
 
+        public static DataTable ConcStations(DataTable base_dt, int wer)
+        {
+            DataTable dt = base_dt.Copy();
+
+            Dictionary<string, string> uniquenessDict = new Dictionary<string, string>(base_dt.Rows.Count);
+            StringBuilder sb = null;
+            int rowIndex = 0;
+            DataRow row;
+            DataRowCollection rows = base_dt.Rows;
+
+            while (rowIndex < rows.Count - 1)
+            {
+                row = rows[rowIndex];
+                sb = new StringBuilder();
+                switch (wer)
+                {
+                    case 1:
+                        sb.Append(row["lac"].ToString());
+                        sb.Append(row["btsid"].ToString().Substring(0, row["btsid"].ToString().Length-1).ToString());
+                        sb.Append(row["StationID"].ToString());
+                        break;
+                    case 2:
+                        sb.Append(row["eNBI"].ToString());
+                        sb.Append(row["StationID"].ToString());
+                        break;
+                }
+                if (uniquenessDict.ContainsKey(sb.ToString()))
+                {
+                    rows.Remove(row);
+                }
+                else
+                {
+                    uniquenessDict.Add(sb.ToString(), string.Empty);
+                    rowIndex++;
+                }
+            }
+
+            return dt;
+        }
+
+
         public static void SaveToCSV(DataTable dt, string path)
         {
             if (File.Exists(path))
@@ -266,7 +320,6 @@ namespace CSV_reader
                 }
             }
 
-            //using (var textWriter = File.CreateText(path))
             using (var textWriter = new StreamWriter(path, false, Encoding.UTF8))
             using (var csv = new CsvWriter(textWriter))
             {
@@ -288,9 +341,11 @@ namespace CSV_reader
                     csv.NextRecord();
                 }
             }
+            //dt.Clear();
+            //dt.Dispose();
+            //dt = null;
 
         }
-
 
     }
 }

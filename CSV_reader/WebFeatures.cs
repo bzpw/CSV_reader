@@ -60,9 +60,9 @@ namespace CSV_reader
                     new Uri("http://www.btsearch.pl/export.php"),
                                  // Param2 = Path to save
                    dir + "btsearch.csv");
-                //Console.WriteLine("DLed BTS");
+                Console.WriteLine("DLed BTS");
             }
-            return dir + "Btsearch.csv";
+            return dir + "btsearch.csv";
         }
 
         static class LinkFinder
