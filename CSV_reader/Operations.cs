@@ -264,7 +264,7 @@ namespace CSV_reader
         }
 
 
-        public static DataTable ConcStations(DataTable base_dt, int wer)
+        /*public static DataTable ConcStations(DataTable base_dt, int wer)
         {
             DataTable dt = base_dt.Copy();
 
@@ -302,9 +302,9 @@ namespace CSV_reader
             }
 
             return dt;
-        }
+        }*/
 
-
+         
         public static void SaveToCSV(DataTable dt, string path)
         {
             if (File.Exists(path))
