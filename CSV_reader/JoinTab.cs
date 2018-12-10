@@ -12,14 +12,14 @@ namespace CSV_reader
 {
     class JoinTab
     {
-        
+
         public static DataTable JoinBTS2Log(DataTable bts, DataTable log)
         {
             DataTable dt = bts.Clone();
             //dt.Columns.Add("LogLati");
             //dt.Columns.Add("LogLong");
             dt.Columns.Add("Date");
-            
+
             for (int i = 0; i < log.Rows.Count; i++)
             {
 
@@ -142,12 +142,86 @@ namespace CSV_reader
             return dt;
         }
 
-        /*public static DataTable JoinUKE2BTS(DataTable bts, DataTable uke)
+        public static DataTable JoinUKE2BTS(DataTable bts, DataTable uke)
         {
             DataTable dt = bts.Clone();
+            //dt.Columns.Add("LogLati");
+            //dt.Columns.Add("LogLong");
+            dt.Columns.Add("UKE_PosLong");
+            dt.Columns.Add("UKE_PosLati");
+            dt.Columns.Add("UKE_Status");
+
+            for (int i = 0; i < uke.Rows.Count; i++)
+            {
+                if ((i+1 < uke.Rows.Count) && (uke.Rows[i]["IdStacji"] == uke.Rows[i+1]["IdStacji"]))
+                {
+                    i++;
+                    continue;
+                }
+
+                DataRow[] dr = bts.Select("StationId = '" + uke.Rows[i]["IdStacji"] + "'");
+                if (!(dr.Length < 1))
+                {
+                    foreach (DataRow row in dr)
+                    {
+                        if (!row.Table.Columns.Contains("UKE_PosLong"))
+                        {
+                            row.Table.Columns.Add("UKE_PosLong");
+                        }
+                        if (!row.Table.Columns.Contains("UKE_PosLati"))
+                        {
+                            row.Table.Columns.Add("UKE_PosLati");
+                        }
+                        if (!row.Table.Columns.Contains("UKE_Status"))
+                        {
+                            row.Table.Columns.Add("UKE_Status");
+                        }
+                        row["UKE_PosLong"] = uke.Rows[i]["DlGeogr"];
+                        row["UKE_PosLati"] = uke.Rows[i]["SzGeogr"];
+                        row["UKE_Status"] = "Copied.";
+                        dt.ImportRow(row);
+                    }
+                }
+                else
+                {
+                    DataRow rr = bts.Copy().Rows[1];
+                    if (!rr.Table.Columns.Contains("UKE_PosLong"))
+                    {
+                        rr.Table.Columns.Add("UKE_PosLong");
+                    }
+                    if (!rr.Table.Columns.Contains("UKE_PosLati"))
+                    {
+                        rr.Table.Columns.Add("UKE_PosLati");
+                    }
+                    if (!rr.Table.Columns.Contains("UKE_Status"))
+                    {
+                        rr.Table.Columns.Add("UKE_Status");
+                    }
+                    foreach (DataColumn column in rr.Table.Columns)
+                    {
+                        rr[column] = null;
+                    }
+                    rr["StationId"] = uke.Rows[i]["IdStacji"];
+                    rr["UKE_PosLong"] = null;
+                    rr["UKE_PosLati"] = null;
+                    rr["UKE_Status"] = "No match in BTSearch.";                
+                    dt.ImportRow(rr);
+                    Console.WriteLine("No match for: " + uke.Rows[i]["IdStacji"]);
+                }
+
+                //dorobić sprawdzanie niewykorzystanych stacji BTS
+                /*DataTable dt2 = dt.Clone();
+                foreach (DataRow dra in dt.Rows)
+                {
+                    DataRow[] drr = bts.Select("StationId NOT IN '" + dra["StationId"] + "'");
+
+                    
+                }*/
+
+            }
 
             return dt;
-        }*/
+        }
 
     }
 }

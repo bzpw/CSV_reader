@@ -19,10 +19,10 @@ namespace CSV_reader
             //ścieżka do pliku, nazwa DT
             string path = @"C:\Temp\";
             string path2 = WebFeatures.DLb(path);
-            //List<string> pathx = WebFeatures.GetUKE();
+            List<string> pathx = WebFeatures.GetUKE();
 
             DataTable dt = Operations.ReadBTS(path2);
-            //DataTable dtu = Operations.ReadUKE(pathx);
+            DataTable dtu = Operations.ReadUKE(pathx);
 
             //!operacje na DT
             //DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
@@ -63,16 +63,21 @@ namespace CSV_reader
 
             DataTable logdt = OperationsLog.Logreader(@"F:\_BZ\BTSy\log.log");
             logdt = OperationsLog.BreakBts(logdt);
-            DataTable whatever = JoinTab.JoinBTS2Log(AllBts, logdt);
+
+            DataTable join_log = JoinTab.JoinBTS2Log(AllBts, logdt);
             //Operations.PrintToConsole(whatever);
-            Operations.SaveToCSV(whatever, @"C:\Temp\Res\Joindt.csv");
+            Operations.SaveToCSV(join_log, @"C:\Temp\Res\Joindt.csv");
+
+            //DataTable u2b = JoinTab.JoinUKE2BTS(join_log, dtu);
 
 
             Directory.CreateDirectory(@"C:\Temp\Res\");
             string respath = @"C:\Temp\Res\CSV_reader.csv";
             string respathu = @"C:\Temp\Res\UKE_reader.csv";
+            //string respathj = @"C:\Temp\Res\Joinu2b.csv";
             Operations.SaveToCSV(AllBts, respath);
-            //Operations.SaveToCSV(dtu, respathu);
+            Operations.SaveToCSV(dtu, respathu);
+            //Operations.SaveToCSV(u2b, respathj);
 
             stopwatch.Stop();
             Console.WriteLine("Czas: " + stopwatch.ElapsedMilliseconds);
