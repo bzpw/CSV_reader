@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 namespace CSV_reader
 {
-    class Operations
+    public class Operations
     {
         public static DataTable ReadBTS(string path)
         {

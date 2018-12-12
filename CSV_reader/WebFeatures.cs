@@ -8,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace CSV_reader
 {
-    class WebFeatures
+    public class WebFeatures
     {
 
         public static List<string> GetUKE()

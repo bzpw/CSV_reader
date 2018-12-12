@@ -10,7 +10,7 @@ using deTracker;
 
 namespace CSV_reader
 {
-    class JoinTab
+    public class JoinTab
     {
 
         public static DataTable JoinBTS2Log(DataTable bts, DataTable log)
