@@ -39,6 +39,7 @@
             this.SelectLog_OFD = new System.Windows.Forms.OpenFileDialog();
             this.ClearLogList_Button = new System.Windows.Forms.Button();
             this.ReadData_Button = new System.Windows.Forms.Button();
+            this.PB_ProgressBar = new System.Windows.Forms.ProgressBar();
             this.DlData_GroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -164,11 +165,23 @@
             this.ReadData_Button.UseVisualStyleBackColor = true;
             this.ReadData_Button.Click += new System.EventHandler(this.ReadData_Button_Click);
             // 
+            // PB_ProgressBar
+            // 
+            this.PB_ProgressBar.Location = new System.Drawing.Point(11, 399);
+            this.PB_ProgressBar.Margin = new System.Windows.Forms.Padding(10);
+            this.PB_ProgressBar.Name = "PB_ProgressBar";
+            this.PB_ProgressBar.Size = new System.Drawing.Size(344, 31);
+            this.PB_ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.PB_ProgressBar.TabIndex = 9;
+            this.PB_ProgressBar.Visible = false;
+            this.PB_ProgressBar.Click += new System.EventHandler(this.PB_ProgressBar_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(496, 441);
+            this.Controls.Add(this.PB_ProgressBar);
             this.Controls.Add(this.ReadData_Button);
             this.Controls.Add(this.ClearLogList_Button);
             this.Controls.Add(this.FileList_TextBox);
@@ -202,6 +215,7 @@
         private System.Windows.Forms.OpenFileDialog SelectLog_OFD;
         private System.Windows.Forms.Button ClearLogList_Button;
         private System.Windows.Forms.Button ReadData_Button;
+        private System.Windows.Forms.ProgressBar PB_ProgressBar;
     }
 }
 

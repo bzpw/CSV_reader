@@ -19,7 +19,7 @@ namespace ReaderActionForm
     {
         List<string> filenames = new List<string>();
         string dir = "";
-
+        string diru = "";
 
         public Form1()
         {
@@ -37,11 +37,20 @@ namespace ReaderActionForm
         //pobierz dane BTS lub UKE -- przycisk
         private void DownloadData_Button_Click(object sender, EventArgs e)
         {
+
             DialogResult fbd = SelectDir_FBD.ShowDialog();
+            PB_ProgressBar.Visible = true;
+            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+            PB_ProgressBar.BringToFront();
+
             if (fbd == DialogResult.OK)
             {
-                Thread.Sleep(125);
+                Thread.Sleep(100);
+
                 dir = SelectDir_FBD.SelectedPath + '\\';
+                //DLinBck_BackgroundWorker.RunWorkerAsync(dir);
+
+
                 if (DownloadData_CheckBox.GetItemChecked(0))
                 {
                     string btspath = WebFeatures.DLb(dir);
@@ -49,23 +58,54 @@ namespace ReaderActionForm
                 }
                 if (DownloadData_CheckBox.GetItemChecked(1))
                 {
-                    dir = dir + @"DL_UKE\";
-                    Directory.CreateDirectory(dir);
+                    diru = dir + @"DL_UKE\";
+                    Directory.CreateDirectory(diru);
                     List<string> links = WebFeatures.GetUKE();
                     foreach (string link in links)
                     {
-                        WebFeatures.DLu(dir, link);
+                        WebFeatures.DLu(diru, link);
+                        Thread.Sleep(10);
                     }
-                    MessageBox.Show("Dowloaded UKE...");
+                    MessageBox.Show("Downloaded UKE...");
                 }
             }
+
+           PB_ProgressBar.Visible = false;
         }
 
+      
         //uruchom ReadBTS i ReadUKE i dalej -- przycisk
         private void ReadData_Button_Click(object sender, EventArgs e)
         {
-            Operations.ReadBTS(dir);
-            //Operations.ReadUKE(dir);
+            PB_ProgressBar.Visible = true;
+            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+
+            if (dir == "")
+            {
+                DialogResult fbd = SelectDir_FBD.ShowDialog();
+                if (fbd == DialogResult.OK)
+                {
+                    dir = SelectDir_FBD.SelectedPath + '\\';
+                    diru = dir + @"DL_UKE\";
+                }
+            }
+
+            Directory.CreateDirectory(dir + "Res");
+            DataTable bts = Operations.ReadBTS(dir + "btsearch.csv");
+            DataTable bts2 = Operations.SelecMerge(bts);
+            Operations.SaveToCSV(bts2, dir + "Res\\CSV_reader.csv");
+            bts.Clear();
+            bts2.Clear();
+            bts.Dispose();
+            bts2.Dispose();
+            MessageBox.Show("BTsearch done.");
+            DataTable uke = Operations.ReadUKE(diru);
+            Operations.SaveToCSV(uke, dir + "Res\\UKE_reader.csv");
+            uke.Clear();
+            uke.Dispose();
+            MessageBox.Show("UKE done.");
+
+            PB_ProgressBar.Visible = false;
         }
 
 
@@ -85,26 +125,28 @@ namespace ReaderActionForm
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
-
         }
 
         private void SelectDir_FBD_HelpRequest(object sender, EventArgs e)
         {
-
         }
 
         private void SelectLog_OFD_FileOk(object sender, CancelEventArgs e)
         {
-
         }
 
 
         //wczytywanie i przygotowanie plików z logami -- przycisk
         private void ReadLogs_Button_Click(object sender, EventArgs e)
         {
+            PB_ProgressBar.Visible = true;
+            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+            int cnt = 0;
             //MessageBox.Show("Wololo");
+
             foreach (string name in filenames)
             {
+                cnt++;
                 string fdir = Path.GetDirectoryName(name);
                 string fname = Path.GetFileNameWithoutExtension(name);
                 string fext = Path.GetExtension(name);
@@ -113,14 +155,13 @@ namespace ReaderActionForm
                 dt = OperationsLog.BreakBts(dt);
                 Operations.SaveToCSV(dt, fdir + '\\' + fname + '2' + fext);
                 //FileList_TextBox.AppendText("wololo\n");
-                MessageBox.Show("Zakończono przetwarzanie logu");
+                MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt);
             }
-
+            PB_ProgressBar.Visible = false;
         }
 
         private void FileList_TextBox_TextChanged(object sender, EventArgs e)
         {
-
         }
 
 
@@ -161,6 +202,10 @@ namespace ReaderActionForm
             //MessageBox.Show(filenames.Count.ToString());
         }
 
-        
+       
+        private void PB_ProgressBar_Click(object sender, EventArgs e)
+        {
+        }      
+
     }
 }

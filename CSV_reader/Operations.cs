@@ -73,7 +73,7 @@ namespace CSV_reader
         }
 
 
-        public static DataTable ReadUKE(List<string> urls)
+        public static DataTable ReadUKE(string dir)
         {
             //DataTable uke = new DataTable("UKE");
             DataTable dt = new DataTable("UKE");
@@ -85,14 +85,14 @@ namespace CSV_reader
             dt.Columns.Add(new DataColumn("Lokalizacja", typeof(String)));
             dt.Columns.Add(new DataColumn("IdStacji", typeof(String)));
 
-            var dir = @"C:\Temp\DL_UKE\";
+            /*var dir = @"C:\Temp\DL_UKE\";
             //var dir = @"F:\_BZ\BTSy\DL_UKE\";
             Directory.CreateDirectory(dir);
 
             foreach (string url in urls)
             {
                 WebFeatures.DLu(dir, url);
-            }
+            }*/
 
             string[] paths = Directory.GetFiles(dir);
 
@@ -143,6 +143,45 @@ namespace CSV_reader
             Directory.Delete(dir);*/
 
             return dt;
+        }
+
+
+        public static DataTable SelecMerge(DataTable dt)
+        {
+            //!operacje na DT
+            //DataTable cdma42 = Operations.Sel_23G("CDMA", "420", dt); //brak w btsearch
+            //DataTable cdma42s = Operations.ConcStations(ref cdma42, 1);
+            //DataTable cdma45 = Operations.Sel_23G("CDMA", "450", dt); //brak w btsearch 
+            //DataTable cdma45s = Operations.ConcStations(ref cdma45, 1);
+            DataTable gsm18 = Operations.Sel_23G("GSM", "1800", ref dt); //potrzebny LAC i CID
+            DataTable gsm9 = Operations.Sel_23G("GSM", "900", ref dt); //potrzebny LAC i CID
+            DataTable gsm9e = Operations.Sel_23G("E-GSM", "900", ref dt); //potrzebny LAC i CID -> CID = btsid --ostatnia cyfra (z jednej z kolumn cid*)
+            DataTable lte18 = Operations.Sel_4G("LTE", "1800", ref dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte21 = Operations.Sel_4G("LTE", "2100", ref dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte26 = Operations.Sel_4G("LTE", "2600", ref dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte8 = Operations.Sel_4G("LTE", "800", ref dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable lte9 = Operations.Sel_4G("LTE", "900", ref dt); //identyfikacja po ENBI / CLID / ECID
+            DataTable umts18 = Operations.Sel_23G("UMTS", "1800", ref dt); //potrzebny LAC i CID
+            DataTable umts21 = Operations.Sel_23G("UMTS", "2100", ref dt); //potrzebny LAC i CID
+            DataTable umts9 = Operations.Sel_23G("UMTS", "900", ref dt); //potrzebny LAC i CID
+
+            DataTable AllBts = new DataTable();
+            //AllBts.Merge(cdma42);
+            //AllBts.Merge(cdma45);
+            AllBts.Merge(gsm18);
+            AllBts.Merge(gsm9);
+            AllBts.Merge(gsm9e);
+            AllBts.Merge(lte18);
+            AllBts.Merge(lte21);
+            AllBts.Merge(lte26);
+            AllBts.Merge(lte8);
+            AllBts.Merge(lte9);
+            AllBts.Merge(umts18);
+            AllBts.Merge(umts21);
+            AllBts.Merge(umts9);
+
+
+            return AllBts;
         }
 
         public static void PrintToConsole(DataTable dt)

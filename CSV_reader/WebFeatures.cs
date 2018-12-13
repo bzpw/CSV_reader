@@ -23,7 +23,7 @@ namespace CSV_reader
                 linkx.Add(li);
             }
             //Console.WriteLine(string.Join("\n", linkx));
-
+            
             return linkx;
         }
 
@@ -42,11 +42,12 @@ namespace CSV_reader
 
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadFile(
+                wc.DownloadFileAsync(
                     // Param1 = Link of file
                     new Uri(url),
                    // Param2 = Path to save
                    dir + url.Substring(nmb));
+                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
                 //Console.WriteLine("DLed " + url.Substring(nmb));
             }
         }
@@ -55,14 +56,20 @@ namespace CSV_reader
         {
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadFile(
+                wc.DownloadFileAsync(
                     // Param1 = Link of file
                     new Uri("http://www.btsearch.pl/export.php"),
                                  // Param2 = Path to save
                    dir + "btsearch.csv");
+                wc.DownloadFileCompleted += Wc_DownloadFileCompleted;
                 Console.WriteLine("DLed BTS");
             }
             return dir + "btsearch.csv";
+        }
+
+        private static void Wc_DownloadFileCompleted(object sender, System.ComponentModel.AsyncCompletedEventArgs e)
+        {
+            throw new NotImplementedException();
         }
 
         static class LinkFinder
