@@ -135,7 +135,7 @@ namespace ReaderActionForm
         {
         }
 
-
+        //https://stackoverflow.com/questions/23188783/how-to-check-if-file-download-is-complete
         //wczytywanie i przygotowanie plików z logami -- przycisk
         private void ReadLogs_Button_Click(object sender, EventArgs e)
         {
