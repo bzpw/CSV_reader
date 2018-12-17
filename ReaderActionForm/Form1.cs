@@ -35,61 +35,85 @@ namespace ReaderActionForm
 
 
         //pobierz dane BTS lub UKE -- przycisk
-        private void DownloadData_Button_Click(object sender, EventArgs e)
+        private async void DownloadData_Button_ClickAsync(object sender, EventArgs e)
         {
 
             DialogResult fbd = SelectDir_FBD.ShowDialog();
             PB_ProgressBar.Visible = true;
             PB_ProgressBar.MarqueeAnimationSpeed = 25;
             PB_ProgressBar.BringToFront();
+            this.Enabled = false;
 
             if (fbd == DialogResult.OK)
             {
                 Thread.Sleep(100);
 
                 dir = SelectDir_FBD.SelectedPath + '\\';
-                //DLinBck_BackgroundWorker.RunWorkerAsync(dir);
-
-
-                if (DownloadData_CheckBox.GetItemChecked(0))
-                {
-                    string btspath = WebFeatures.DLb(dir);
-                    MessageBox.Show("Downloaded btsearch...");
-                }
-                if (DownloadData_CheckBox.GetItemChecked(1))
-                {
-                    diru = dir + @"DL_UKE\";
-                    Directory.CreateDirectory(diru);
-                    List<string> links = WebFeatures.GetUKE();
-                    foreach (string link in links)
-                    {
-                        WebFeatures.DLu(diru, link);
-                        Thread.Sleep(10);
-                    }
-                    MessageBox.Show("Downloaded UKE...");
-                }
+                await Task.Run(() => DlData_Fn(dir));                
             }
 
-           PB_ProgressBar.Visible = false;
+            PB_ProgressBar.Visible = false;
+            this.Enabled = true;
         }
 
-      
-        //uruchom ReadBTS i ReadUKE i dalej -- przycisk
-        private void ReadData_Button_Click(object sender, EventArgs e)
+
+        //fja uruchamiająca async pobieranie danych bts/uke
+        protected void DlData_Fn(string dir)
         {
-            PB_ProgressBar.Visible = true;
-            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+            if (DownloadData_CheckBox.GetItemChecked(0))
+            {
+                string btspath = WebFeatures.DLb(dir);
+                MessageBox.Show("Downloaded btsearch...");
+            }
+            if (DownloadData_CheckBox.GetItemChecked(1))
+            {
+                diru = dir + @"DL_UKE\";
+                Directory.CreateDirectory(diru);
+                List<string> links = WebFeatures.GetUKE();
+                foreach (string link in links)
+                {
+                    WebFeatures.DLu(diru, link);
+                    Thread.Sleep(25);
+                }
+                MessageBox.Show("Downloaded UKE...");
+            }
+        }
+
+
+        //uruchom ReadBTS i ReadUKE i dalej -- przycisk
+        private async void ReadData_Button_Click(object sender, EventArgs e)
+        {
+            
 
             if (dir == "")
             {
                 DialogResult fbd = SelectDir_FBD.ShowDialog();
+                PB_ProgressBar.Visible = true;
+                PB_ProgressBar.MarqueeAnimationSpeed = 25;
+                this.Enabled = false;
                 if (fbd == DialogResult.OK)
                 {
                     dir = SelectDir_FBD.SelectedPath + '\\';
                     diru = dir + @"DL_UKE\";
+                    await Task.Run(() => ReadData_Fn(dir));
                 }
             }
+            else
+            {
+                PB_ProgressBar.Visible = true;
+                PB_ProgressBar.MarqueeAnimationSpeed = 25;
+                this.Enabled = false;
+                await Task.Run(() => ReadData_Fn(dir));
+            }
 
+            PB_ProgressBar.Visible = false;
+            this.Enabled = true;
+        }
+
+
+        //fja uruchamiająca async operacje na bts / uke
+        protected void ReadData_Fn(string dir)
+        {
             Directory.CreateDirectory(dir + "Res");
             DataTable bts = Operations.ReadBTS(dir + "btsearch.csv");
             DataTable bts2 = Operations.SelecMerge(bts);
@@ -104,10 +128,7 @@ namespace ReaderActionForm
             uke.Clear();
             uke.Dispose();
             MessageBox.Show("UKE done.");
-
-            PB_ProgressBar.Visible = false;
         }
-
 
         //checkbox BTS/UKE żeby deaktywować przycisk
         private void DownloadData_CheckBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -120,8 +141,8 @@ namespace ReaderActionForm
             {
                 DownloadData_Button.Enabled = false;
             }
-
         }
+
 
         private void groupBox1_Enter(object sender, EventArgs e)
         {
@@ -134,6 +155,7 @@ namespace ReaderActionForm
         private void SelectLog_OFD_FileOk(object sender, CancelEventArgs e)
         {
         }
+
 
         //https://stackoverflow.com/questions/23188783/how-to-check-if-file-download-is-complete
         //wczytywanie i przygotowanie plików z logami -- przycisk
@@ -155,7 +177,10 @@ namespace ReaderActionForm
                 dt = OperationsLog.BreakBts(dt);
                 Operations.SaveToCSV(dt, fdir + '\\' + fname + '2' + fext);
                 //FileList_TextBox.AppendText("wololo\n");
+                dt.Clear();
+                dt.Dispose();
                 MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt);
+
             }
             PB_ProgressBar.Visible = false;
         }

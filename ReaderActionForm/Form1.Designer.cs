@@ -53,7 +53,7 @@
             this.DownloadData_Button.TabIndex = 0;
             this.DownloadData_Button.Text = "Pobierz";
             this.DownloadData_Button.UseVisualStyleBackColor = true;
-            this.DownloadData_Button.Click += new System.EventHandler(this.DownloadData_Button_Click);
+            this.DownloadData_Button.Click += new System.EventHandler(this.DownloadData_Button_ClickAsync);
             // 
             // DownloadData_CheckBox
             // 

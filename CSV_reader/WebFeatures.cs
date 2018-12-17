@@ -42,7 +42,7 @@ namespace CSV_reader
 
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadFileAsync(
+                wc.DownloadFile(
                     // Param1 = Link of file
                     new Uri(url),
                    // Param2 = Path to save
@@ -56,7 +56,7 @@ namespace CSV_reader
         {
             using (WebClient wc = new WebClient())
             {
-                wc.DownloadFileAsync(
+                wc.DownloadFile(
                     // Param1 = Link of file
                     new Uri("http://www.btsearch.pl/export.php"),
                                  // Param2 = Path to save
