@@ -20,6 +20,7 @@ namespace ReaderActionForm
         List<string> filenames = new List<string>();
         string dir = "";
         string diru = "";
+        DataTable dt_bts = new DataTable("BTS");
 
         public Form1()
         {
@@ -116,12 +117,12 @@ namespace ReaderActionForm
         {
             Directory.CreateDirectory(dir + "Res");
             DataTable bts = Operations.ReadBTS(dir + "btsearch.csv");
-            DataTable bts2 = Operations.SelecMerge(bts);
-            Operations.SaveToCSV(bts2, dir + "Res\\CSV_reader.csv");
+            dt_bts = Operations.SelecMerge(bts);
+            Operations.SaveToCSV(dt_bts, dir + "Res\\CSV_reader.csv");
             bts.Clear();
-            bts2.Clear();
+            //dt_bts.Clear();
             bts.Dispose();
-            bts2.Dispose();
+            //dt_bts.Dispose();
             MessageBox.Show("BTsearch done.");
             DataTable uke = Operations.ReadUKE(diru);
             Operations.SaveToCSV(uke, dir + "Res\\UKE_reader.csv");
@@ -130,8 +131,23 @@ namespace ReaderActionForm
             MessageBox.Show("UKE done.");
         }
 
+
         //checkbox BTS/UKE żeby deaktywować przycisk
-        private void DownloadData_CheckBox_SelectedIndexChanged(object sender, EventArgs e)
+        private void DownloadData_CheckBox_Click(object sender, EventArgs e)
+        {
+            if (DownloadData_CheckBox.GetItemChecked(0) || DownloadData_CheckBox.GetItemChecked(1))
+            {
+                DownloadData_Button.Enabled = true;                
+            }
+            else
+            {
+                DownloadData_Button.Enabled = false;
+            }
+        }
+
+
+        //checkbox BTS/UKE żeby deaktywować przycisk
+        /*private void DownloadData_CheckBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (DownloadData_CheckBox.GetItemChecked(0) || DownloadData_CheckBox.GetItemChecked(1))
             {
@@ -141,7 +157,7 @@ namespace ReaderActionForm
             {
                 DownloadData_Button.Enabled = false;
             }
-        }
+        }*/
 
 
         private void groupBox1_Enter(object sender, EventArgs e)
@@ -159,31 +175,62 @@ namespace ReaderActionForm
 
         //https://stackoverflow.com/questions/23188783/how-to-check-if-file-download-is-complete
         //wczytywanie i przygotowanie plików z logami -- przycisk
-        private void ReadLogs_Button_Click(object sender, EventArgs e)
+        private async void ReadLogs_Button_Click(object sender, EventArgs e)
         {
-            PB_ProgressBar.Visible = true;
-            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+            if (filenames.Count < 1)
+            {
+                MessageBox.Show(@"Błąd. Brak logów.");
+                return;
+            }
+            if (dir == "" || dt_bts.Rows.Count < 1)
+            {
+                DialogResult fbd = SelectDir_FBD.ShowDialog();
+                PB_ProgressBar.Visible = true;
+                PB_ProgressBar.MarqueeAnimationSpeed = 25;
+                this.Enabled = false;
+                if (fbd == DialogResult.OK)
+                {
+                    dir = SelectDir_FBD.SelectedPath + "\\Res\\";
+                    //diru = dir + @"DL_UKE\";
+                    //await Task.Run(() => ReadData_Fn(dir));
+                    dt_bts =  await Task.Run(() => Operations.ReadBTS(dir + "CSV_reader.csv"));
+                }
+                else
+                {
+                    PB_ProgressBar.Visible = true;
+                    PB_ProgressBar.MarqueeAnimationSpeed = 25;
+                }
+            }
+
             int cnt = 0;
-            //MessageBox.Show("Wololo");
 
             foreach (string name in filenames)
             {
                 cnt++;
-                string fdir = Path.GetDirectoryName(name);
-                string fname = Path.GetFileNameWithoutExtension(name);
-                string fext = Path.GetExtension(name);
-                //MessageBox.Show(fdir + '\\' + fname + '2' + fext + '\\');
-                DataTable dt = OperationsLog.Logreader(name);
-                dt = OperationsLog.BreakBts(dt);
-                Operations.SaveToCSV(dt, fdir + '\\' + fname + '2' + fext);
-                //FileList_TextBox.AppendText("wololo\n");
-                dt.Clear();
-                dt.Dispose();
-                MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt);
+                
+                await Task.Run(() => ReadLogs_Fn(name));
 
+                MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt);
             }
             PB_ProgressBar.Visible = false;
+            this.Enabled = true;
         }
+
+
+        //fja uruchamiająca async operacje na logach
+        protected void ReadLogs_Fn(string name)
+        {
+            string fdir = Path.GetDirectoryName(name);
+            string fname = Path.GetFileNameWithoutExtension(name);
+            string fext = Path.GetExtension(name);
+            DataTable dt = OperationsLog.Logreader(name);
+            dt = OperationsLog.BreakBts(dt);
+            dt = JoinTab.JoinBTS2Log(dt_bts, dt);
+            Operations.SaveToCSV(dt, fdir + '\\' + fname + "_2" + fext);
+            dt.Clear();
+            dt.Dispose();
+        }
+
 
         private void FileList_TextBox_TextChanged(object sender, EventArgs e)
         {
@@ -203,7 +250,7 @@ namespace ReaderActionForm
         public void SelectLogs_Button_Click(object sender, EventArgs e)
         {
             //string[] filenames;
-            //SafeFileNames, FileNames
+            ///SafeFileNames, FileNames
             SelectLog_OFD.RestoreDirectory = true;
             SelectLog_OFD.Filter = "Text Files (*.txt;*.log)|*.txt;*.log|All Files (*.*)|*.*";
             DialogResult ofd = SelectLog_OFD.ShowDialog();

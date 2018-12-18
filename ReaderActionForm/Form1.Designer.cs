@@ -66,7 +66,7 @@
             this.DownloadData_CheckBox.Name = "DownloadData_CheckBox";
             this.DownloadData_CheckBox.Size = new System.Drawing.Size(143, 34);
             this.DownloadData_CheckBox.TabIndex = 1;
-            this.DownloadData_CheckBox.SelectedIndexChanged += new System.EventHandler(this.DownloadData_CheckBox_SelectedIndexChanged);
+            this.DownloadData_CheckBox.SelectedIndexChanged += new System.EventHandler(this.DownloadData_CheckBox_Click);
             // 
             // DlData_GroupBox
             // 
