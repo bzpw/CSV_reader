@@ -15,14 +15,14 @@ using Microsoft.WindowsAPICodePack.Dialogs;
 
 namespace ReaderActionForm
 {
-    public partial class Form1 : Form
+    public partial class ReaderForm : Form
     {
         List<string> filenames = new List<string>();
         string dir = "";
         string diru = "";
         DataTable dt_bts = new DataTable("BTS");
 
-        public Form1()
+        public ReaderForm()
         {
             InitializeComponent();
             ReadLogs_Button.Enabled = false;

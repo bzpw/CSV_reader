@@ -1,6 +1,6 @@
 ﻿namespace ReaderActionForm
 {
-    partial class Form1
+    partial class ReaderForm
     {
         /// <summary>
         /// Required designer variable.
