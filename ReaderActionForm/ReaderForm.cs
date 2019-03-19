@@ -12,6 +12,7 @@ using System.Windows.Forms;
 using CSV_reader;
 using deTracker;
 using Microsoft.WindowsAPICodePack.Dialogs;
+ 
 
 namespace ReaderActionForm
 {
@@ -20,7 +21,7 @@ namespace ReaderActionForm
         List<string> filenames = new List<string>();
         string dir = "";
         string diru = "";
-        DataTable dt_bts = new DataTable("BTS");
+        protected DataTable dt_bts = new DataTable("BTS");
 
         public ReaderForm()
         {
@@ -207,11 +208,12 @@ namespace ReaderActionForm
             foreach (string name in filenames)
             {
                 cnt++;
-                
-                await Task.Run(() => ReadLogs_Fn(name));
 
-                MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt);
+                await Task.Run(() => ReadLogs_Fn(name));
+                //MessageBox.Show("Zakończono przetwarzanie logu nr: " + cnt + " o nazwie " + name);
             }
+            PB_ProgressBar.MarqueeAnimationSpeed = 0;
+            MessageBox.Show("Zakończono przetwarzanie wszystkich " +  cnt + " logów", "Sukces!");
             PB_ProgressBar.Visible = false;
             this.Enabled = true;
         }
@@ -223,12 +225,18 @@ namespace ReaderActionForm
             string fdir = Path.GetDirectoryName(name);
             string fname = Path.GetFileNameWithoutExtension(name);
             string fext = Path.GetExtension(name);
-            DataTable dt = OperationsLog.Logreader(name);
-            dt = OperationsLog.BreakBts(dt);
-            dt = JoinTab.JoinBTS2Log(dt_bts, dt);
-            Operations.SaveToCSV(dt, fdir + '\\' + fname + "_2" + fext);
-            dt.Clear();
-            dt.Dispose();
+            DataTable logg = OperationsLog.Logreader(name);
+            System.Diagnostics.Debug.WriteLine(dt_bts.Columns.Contains("Date"));
+            logg = OperationsLog.BreakBts(logg);
+            System.Diagnostics.Debug.WriteLine(dt_bts.Columns.Contains("Date"));
+            //MessageBox.Show("lac: " + dt.Rows[0]["lac"] + ", cid: " + dt.Rows[0]["cid"] + ", cgi: " + dt.Rows[0]["Cgi"].ToString().Substring(7,6));
+            logg = JoinTab.JoinBTS2Log(dt_bts, logg);
+            System.Diagnostics.Debug.WriteLine(dt_bts.Columns.Contains("Date"));
+            Operations.SaveToCSV(logg, fdir + '\\' + fname + "_log" + fext);
+            logg.Clear();
+            logg.Reset();
+            logg.Dispose();
+            dt_bts.Dispose();
         }
 
 
@@ -277,7 +285,32 @@ namespace ReaderActionForm
        
         private void PB_ProgressBar_Click(object sender, EventArgs e)
         {
-        }      
+        }
 
+        private void MergeLogs_Click(object sender, EventArgs e)
+        {
+            List<string> allfiles = new List<string>();
+            PB_ProgressBar.Show();
+            PB_ProgressBar.MarqueeAnimationSpeed = 25;
+            
+            DialogResult ofd = SelectLog_OFD.ShowDialog();
+            if (ofd == DialogResult.OK)
+            {
+                allfiles = SelectLog_OFD.FileNames.ToList();
+            }
+            //System.Diagnostics.Debug.WriteLine("Lista plików.");
+
+            //FDB wybór plików z przygotowanymi logami
+            //merge-owanie tych logów
+            DataTable alllogs = JoinTab.MergeAllLogs(allfiles);
+            //System.Diagnostics.Debug.WriteLine("allfiles[0]: " + allfiles[0] + " , Getdirectory: " + Path.GetDirectoryName(allfiles[0]));
+            //System.Diagnostics.Debug.WriteLine("Merge zakończony.");
+
+            //zapis logów do nowego pliku
+            Operations.SaveToCSV(alllogs, Path.GetDirectoryName(allfiles[0]) + "\\AllLogsMerged.log");
+            //System.Diagnostics.Debug.WriteLine("Plik zapisany.");
+            PB_ProgressBar.Hide();
+            MessageBox.Show("Połączono wszystkie pliki.", "Sukces!");
+        }
     }
 }

@@ -15,12 +15,20 @@ namespace CSV_reader
 
         public static DataTable JoinBTS2Log(DataTable bts, DataTable log)
         {
-            DataTable dt = bts.Clone();
+            DataTable dtt = new DataTable();
+            dtt = bts.Clone();
             //dt.Columns.Add("LogLati");
             //dt.Columns.Add("LogLong");
-            dt.Columns.Add("Date");
+            if (!dtt.Columns.Contains("Date"))
+            {
+                dtt.Columns.Add("Date");
+            }
+            if (!dtt.Columns.Contains("Time"))
+            {
+                dtt.Columns.Add("Time");
+            }
 
-            for (int i = 0; i < log.Rows.Count; i++)
+            for (int i = 0; i < log.Rows.Count-1; i++)
             {
 
                 switch (log.Rows[i]["NetworkType"])
@@ -37,7 +45,7 @@ namespace CSV_reader
                             "cid8 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "' OR " +
                             "cid9 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "' OR " +
                             "cid0 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "')");
-                        if (!(dr.Length < 1))
+                        if (dr.Length == 1)
                         {
                             foreach (DataRow row in dr)
                             {
@@ -46,12 +54,14 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         else
                         {
-                            DataRow[] drq = dt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
+                            DataRow[] drq = dtt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
                             foreach (DataRow row in drq)
                             {
                                 if (!row.Table.Columns.Contains("Date"))
@@ -59,7 +69,9 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         break;
@@ -76,7 +88,7 @@ namespace CSV_reader
                             "cid8 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "' OR " +
                             "cid9 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "' OR " +
                             "cid0 = '" + log.Rows[i]["cid"].ToString().Substring(log.Rows[i]["cid"].ToString().Length - 1) + "')");
-                        if (!(drx.Length < 1))
+                        if (drx.Length == 1)
                         {
                             foreach (DataRow row in drx)
                             {
@@ -85,12 +97,14 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         else
                         {
-                            DataRow[] drxq = dt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
+                            DataRow[] drxq = dtt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
                             foreach (DataRow row in drxq)
                             {
                                 if (!row.Table.Columns.Contains("Date"))
@@ -98,7 +112,9 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         break;
@@ -106,7 +122,7 @@ namespace CSV_reader
                     case "LTE":
                         //DataRow[] drxxq = dt.Select("eNBI = '" + log.Rows[i]["lac"] + "'");
                         DataRow[] drxx = bts.Select("eNBI = '" + log.Rows[i]["lac"] + "' AND CLID = '" + log.Rows[i]["cid"] + "'");
-                        if (!(drxx.Length < 1))
+                        if (drxx.Length == 1)
                         {
                             foreach (DataRow row in drxx)
                             {
@@ -115,12 +131,14 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         else
                         {
-                            DataRow[] drxxq = bts.Select("eNBI = '" + log.Rows[i]["lac"] + "'");
+                            DataRow[] drxxq = dtt.Select("eNBI = '" + log.Rows[i]["lac"] + "'"); //!! bts.Select na dtt.Select
                             foreach (DataRow row in drxxq)
                             {
                                 if (!row.Table.Columns.Contains("Date"))
@@ -128,7 +146,9 @@ namespace CSV_reader
                                     row.Table.Columns.Add("Date");
                                 }
                                 row["Date"] = log.Rows[i]["Date"];
-                                dt.ImportRow(row);
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                row["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(row);
                             }
                         }
                         break;
@@ -138,9 +158,12 @@ namespace CSV_reader
                         break;
                 }
             }
-
-            return dt;
+            //bts.Clear();
+            //bts.Reset();
+            //bts.Dispose();
+            return dtt;
         }
+
 
         public static DataTable JoinUKE2BTS(DataTable bts, DataTable uke)
         {
@@ -223,5 +246,20 @@ namespace CSV_reader
             return dt;
         }
 
+
+        public static DataTable MergeAllLogs(List<string> files)
+        {
+            DataTable log_dt = new DataTable();
+
+            foreach (string file in files){
+                DataTable log1 = Operations.ReadBTS(file);
+                log_dt.Merge(log1);
+                log1.Clear();
+                log1.Dispose();
+            }
+            //System.Diagnostics.Debug.WriteLine("Merge wykonany po raz n.");
+
+            return log_dt;
+        }
     }
 }

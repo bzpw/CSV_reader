@@ -8,11 +8,20 @@ using System.Text.RegularExpressions;
 
 namespace CSV_reader
 {
+
     public class WebFeatures
     {
 
         public static List<string> GetUKE()
         {
+            ServicePointManager.Expect100Continue = true;
+            ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls
+               | SecurityProtocolType.Tls11
+               | SecurityProtocolType.Tls12
+               | SecurityProtocolType.Ssl3;
+            ServicePointManager.SecurityProtocol = (SecurityProtocolType)3072;
+
+
             List<string> linkx = new List<string>();
             string website = @"https://bip.uke.gov.pl/pozwolenia-radiowe/wykaz-pozwolen-radiowych-tresci/stacje-gsm-umts-lte-oraz-cdma,12.html";
             WebClient wc = new WebClient();
