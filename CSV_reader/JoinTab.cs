@@ -28,6 +28,10 @@ namespace CSV_reader
                 dtt.Columns.Add("Time");
             }
 
+            //System.Diagnostics.Debug.WriteLine("DEBUG Log line 209: " + log.Rows[209][0].ToString());
+            //System.Diagnostics.Debug.WriteLine("DEBUG dtt line 200: " + dtt.Rows[200][0].ToString());
+
+
             for (int i = 0; i < log.Rows.Count-1; i++)
             {
 
@@ -49,14 +53,10 @@ namespace CSV_reader
                         {
                             foreach (DataRow row in dr)
                             {
-                                if (!row.Table.Columns.Contains("Date"))
-                                {
-                                    row.Table.Columns.Add("Date");
-                                }
-                                row["Date"] = log.Rows[i]["Date"];
-                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
                                 dtt.ImportRow(row);
+                                dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
                             }
                         }
                         else
@@ -64,14 +64,10 @@ namespace CSV_reader
                             DataRow[] drq = dtt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
                             foreach (DataRow row in drq)
                             {
-                                if (!row.Table.Columns.Contains("Date"))
-                                {
-                                    row.Table.Columns.Add("Date");
-                                }
-                                row["Date"] = log.Rows[i]["Date"];
-                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
                                 dtt.ImportRow(row);
+                                dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
                             }
                         }
                         break;
@@ -92,14 +88,10 @@ namespace CSV_reader
                         {
                             foreach (DataRow row in drx)
                             {
-                                if (!row.Table.Columns.Contains("Date"))
-                                {
-                                    row.Table.Columns.Add("Date");
-                                }
-                                row["Date"] = log.Rows[i]["Date"];
-                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
                                 dtt.ImportRow(row);
+                                dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
                             }
                         }
                         else
@@ -107,14 +99,10 @@ namespace CSV_reader
                             DataRow[] drxq = dtt.Select("lac = '" + log.Rows[i]["lac"] + "' AND btsid = '" + log.Rows[i]["cid"].ToString().Substring(0, log.Rows[i]["cid"].ToString().Length - 1) + "'");
                             foreach (DataRow row in drxq)
                             {
-                                if (!row.Table.Columns.Contains("Date"))
-                                {
-                                    row.Table.Columns.Add("Date");
-                                }
-                                row["Date"] = log.Rows[i]["Date"];
-                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
                                 dtt.ImportRow(row);
+                                dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
                             }
                         }
                         break;
@@ -125,15 +113,26 @@ namespace CSV_reader
                         if (drxx.Length == 1)
                         {
                             foreach (DataRow row in drxx)
-                            {
-                                if (!row.Table.Columns.Contains("Date"))
+                            {            
+                                foreach(var item in log.Rows[i].ItemArray)
                                 {
-                                    row.Table.Columns.Add("Date");
+                                    System.Diagnostics.Debug.Write(item.ToString() + "\t");
                                 }
-                                row["Date"] = log.Rows[i]["Date"];
+                                foreach(var item in row.ItemArray)
+                                {
+                                    System.Diagnostics.Debug.Write(item.ToString() + "\t");
+                                }
+                                System.Diagnostics.Debug.WriteLine("\n");
+                                //dtt.ImportRow(row);
+                                DataRow ndr = dtt.NewRow();
+                                //dtt.Rows.Add(row.ItemArray);
+                                ndr.ItemArray = row.ItemArray;
+                                //dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                ndr["Date"] = log.Rows[i]["Date"];
                                 DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
-                                dtt.ImportRow(row);
+                                //dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
+                                ndr["Time"] = time.ToString("HH:mm:ss");
+                                dtt.ImportRow(ndr);
                             }
                         }
                         else
@@ -141,14 +140,10 @@ namespace CSV_reader
                             DataRow[] drxxq = dtt.Select("eNBI = '" + log.Rows[i]["lac"] + "'"); //!! bts.Select na dtt.Select
                             foreach (DataRow row in drxxq)
                             {
-                                if (!row.Table.Columns.Contains("Date"))
-                                {
-                                    row.Table.Columns.Add("Date");
-                                }
-                                row["Date"] = log.Rows[i]["Date"];
-                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
-                                row["Time"] = time.ToString("HH:mm:ss");
                                 dtt.ImportRow(row);
+                                dtt.Rows[i]["Date"] = log.Rows[i]["Date"];
+                                DateTime time = DateTime.Parse(log.Rows[i]["Date"].ToString());
+                                dtt.Rows[i]["Time"] = time.ToString("HH:mm:ss");
                             }
                         }
                         break;
