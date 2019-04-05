@@ -40,18 +40,16 @@
             this.ReadData_Button = new System.Windows.Forms.Button();
             this.PB_ProgressBar = new System.Windows.Forms.ProgressBar();
             this.MergeLogs = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.DlData_GroupBox.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.SuspendLayout();
             // 
             // DownloadData_Button
             // 
-            this.DownloadData_Button.Location = new System.Drawing.Point(163, 11);
-            this.DownloadData_Button.Margin = new System.Windows.Forms.Padding(10);
+            this.DownloadData_Button.Location = new System.Drawing.Point(388, 32);
+            this.DownloadData_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.DownloadData_Button.Name = "DownloadData_Button";
-            this.DownloadData_Button.Padding = new System.Windows.Forms.Padding(5);
-            this.DownloadData_Button.Size = new System.Drawing.Size(100, 48);
+            this.DownloadData_Button.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.DownloadData_Button.Size = new System.Drawing.Size(85, 29);
             this.DownloadData_Button.TabIndex = 0;
             this.DownloadData_Button.Text = "Pobierz...";
             this.DownloadData_Button.UseVisualStyleBackColor = true;
@@ -63,10 +61,10 @@
             this.DownloadData_CheckBox.Items.AddRange(new object[] {
             "Dane BTSearch.pl",
             "Dane UKE"});
-            this.DownloadData_CheckBox.Location = new System.Drawing.Point(6, 21);
-            this.DownloadData_CheckBox.Margin = new System.Windows.Forms.Padding(5);
+            this.DownloadData_CheckBox.Location = new System.Drawing.Point(8, 21);
+            this.DownloadData_CheckBox.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.DownloadData_CheckBox.Name = "DownloadData_CheckBox";
-            this.DownloadData_CheckBox.Size = new System.Drawing.Size(145, 34);
+            this.DownloadData_CheckBox.Size = new System.Drawing.Size(143, 34);
             this.DownloadData_CheckBox.TabIndex = 1;
             this.DownloadData_CheckBox.SelectedIndexChanged += new System.EventHandler(this.DownloadData_CheckBox_Click);
             // 
@@ -74,12 +72,11 @@
             // 
             this.DlData_GroupBox.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.DlData_GroupBox.Controls.Add(this.DownloadData_CheckBox);
-            this.DlData_GroupBox.Controls.Add(this.DownloadData_Button);
-            this.DlData_GroupBox.Location = new System.Drawing.Point(11, 6);
-            this.DlData_GroupBox.Margin = new System.Windows.Forms.Padding(5);
+            this.DlData_GroupBox.Location = new System.Drawing.Point(226, 6);
+            this.DlData_GroupBox.Margin = new System.Windows.Forms.Padding(5, 5, 5, 5);
             this.DlData_GroupBox.Name = "DlData_GroupBox";
-            this.DlData_GroupBox.Padding = new System.Windows.Forms.Padding(10);
-            this.DlData_GroupBox.Size = new System.Drawing.Size(268, 66);
+            this.DlData_GroupBox.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
+            this.DlData_GroupBox.Size = new System.Drawing.Size(259, 66);
             this.DlData_GroupBox.TabIndex = 2;
             this.DlData_GroupBox.TabStop = false;
             this.DlData_GroupBox.Text = "Pobierz aktualne dane";
@@ -92,23 +89,23 @@
             // 
             // SelectLogs_Button
             // 
-            this.SelectLogs_Button.Location = new System.Drawing.Point(5, 21);
-            this.SelectLogs_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 5);
+            this.SelectLogs_Button.Location = new System.Drawing.Point(11, 16);
+            this.SelectLogs_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.SelectLogs_Button.Name = "SelectLogs_Button";
-            this.SelectLogs_Button.Padding = new System.Windows.Forms.Padding(5);
-            this.SelectLogs_Button.Size = new System.Drawing.Size(100, 48);
+            this.SelectLogs_Button.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.SelectLogs_Button.Size = new System.Drawing.Size(84, 45);
             this.SelectLogs_Button.TabIndex = 4;
-            this.SelectLogs_Button.Text = "Wybierz pliki \r\nz logami";
+            this.SelectLogs_Button.Text = "Wybierz pliki z logami";
             this.SelectLogs_Button.UseVisualStyleBackColor = true;
             this.SelectLogs_Button.Click += new System.EventHandler(this.SelectLogs_Button_Click);
             // 
             // ReadLogs_Button
             // 
-            this.ReadLogs_Button.Location = new System.Drawing.Point(5, 187);
-            this.ReadLogs_Button.Margin = new System.Windows.Forms.Padding(10);
+            this.ReadLogs_Button.Location = new System.Drawing.Point(127, 16);
+            this.ReadLogs_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.ReadLogs_Button.Name = "ReadLogs_Button";
-            this.ReadLogs_Button.Padding = new System.Windows.Forms.Padding(5);
-            this.ReadLogs_Button.Size = new System.Drawing.Size(100, 48);
+            this.ReadLogs_Button.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.ReadLogs_Button.Size = new System.Drawing.Size(84, 45);
             this.ReadLogs_Button.TabIndex = 5;
             this.ReadLogs_Button.Text = "Odszyfruj logi";
             this.ReadLogs_Button.UseVisualStyleBackColor = true;
@@ -116,13 +113,13 @@
             // 
             // FileList_TextBox
             // 
-            this.FileList_TextBox.Location = new System.Drawing.Point(5, 84);
-            this.FileList_TextBox.Margin = new System.Windows.Forms.Padding(10);
+            this.FileList_TextBox.Location = new System.Drawing.Point(11, 81);
+            this.FileList_TextBox.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.FileList_TextBox.Multiline = true;
             this.FileList_TextBox.Name = "FileList_TextBox";
             this.FileList_TextBox.ReadOnly = true;
             this.FileList_TextBox.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.FileList_TextBox.Size = new System.Drawing.Size(258, 95);
+            this.FileList_TextBox.Size = new System.Drawing.Size(200, 95);
             this.FileList_TextBox.TabIndex = 6;
             this.FileList_TextBox.Text = "Lista wybranych plików...";
             this.FileList_TextBox.TextChanged += new System.EventHandler(this.FileList_TextBox_TextChanged);
@@ -137,24 +134,22 @@
             // 
             // ClearLogList_Button
             // 
-            this.ClearLogList_Button.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearLogList_Button.Location = new System.Drawing.Point(163, 21);
-            this.ClearLogList_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 5);
+            this.ClearLogList_Button.Location = new System.Drawing.Point(11, 186);
+            this.ClearLogList_Button.Margin = new System.Windows.Forms.Padding(5, 0, 5, 5);
             this.ClearLogList_Button.Name = "ClearLogList_Button";
-            this.ClearLogList_Button.Padding = new System.Windows.Forms.Padding(5);
-            this.ClearLogList_Button.Size = new System.Drawing.Size(100, 48);
+            this.ClearLogList_Button.Size = new System.Drawing.Size(75, 23);
             this.ClearLogList_Button.TabIndex = 7;
-            this.ClearLogList_Button.Text = "Wyczyść listę...";
+            this.ClearLogList_Button.Text = "Wyczyść";
             this.ClearLogList_Button.UseVisualStyleBackColor = true;
             this.ClearLogList_Button.Click += new System.EventHandler(this.ClearLogList_Button_Click);
             // 
             // ReadData_Button
             // 
-            this.ReadData_Button.Location = new System.Drawing.Point(174, 85);
-            this.ReadData_Button.Margin = new System.Windows.Forms.Padding(10);
+            this.ReadData_Button.Location = new System.Drawing.Point(384, 76);
+            this.ReadData_Button.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.ReadData_Button.Name = "ReadData_Button";
-            this.ReadData_Button.Padding = new System.Windows.Forms.Padding(5);
-            this.ReadData_Button.Size = new System.Drawing.Size(100, 48);
+            this.ReadData_Button.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.ReadData_Button.Size = new System.Drawing.Size(101, 48);
             this.ReadData_Button.TabIndex = 8;
             this.ReadData_Button.Text = "Przygotuj plik \r\nze stacjami";
             this.ReadData_Button.UseVisualStyleBackColor = true;
@@ -162,10 +157,10 @@
             // 
             // PB_ProgressBar
             // 
-            this.PB_ProgressBar.Location = new System.Drawing.Point(11, 458);
-            this.PB_ProgressBar.Margin = new System.Windows.Forms.Padding(10);
+            this.PB_ProgressBar.Location = new System.Drawing.Point(11, 399);
+            this.PB_ProgressBar.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.PB_ProgressBar.Name = "PB_ProgressBar";
-            this.PB_ProgressBar.Size = new System.Drawing.Size(268, 31);
+            this.PB_ProgressBar.Size = new System.Drawing.Size(467, 31);
             this.PB_ProgressBar.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.PB_ProgressBar.TabIndex = 9;
             this.PB_ProgressBar.Visible = false;
@@ -173,38 +168,29 @@
             // 
             // MergeLogs
             // 
-            this.MergeLogs.Location = new System.Drawing.Point(174, 391);
-            this.MergeLogs.Margin = new System.Windows.Forms.Padding(10);
+            this.MergeLogs.Location = new System.Drawing.Point(119, 186);
+            this.MergeLogs.Margin = new System.Windows.Forms.Padding(10, 10, 10, 10);
             this.MergeLogs.Name = "MergeLogs";
-            this.MergeLogs.Padding = new System.Windows.Forms.Padding(5);
-            this.MergeLogs.Size = new System.Drawing.Size(100, 48);
+            this.MergeLogs.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.MergeLogs.Size = new System.Drawing.Size(92, 44);
             this.MergeLogs.TabIndex = 10;
-            this.MergeLogs.Text = "Połącz logi \r\ndo wczytania";
+            this.MergeLogs.Text = "Przygotuj logi do wczytania";
             this.MergeLogs.UseVisualStyleBackColor = true;
             this.MergeLogs.Click += new System.EventHandler(this.MergeLogs_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.ClearLogList_Button);
-            this.groupBox2.Controls.Add(this.FileList_TextBox);
-            this.groupBox2.Controls.Add(this.SelectLogs_Button);
-            this.groupBox2.Controls.Add(this.ReadLogs_Button);
-            this.groupBox2.Location = new System.Drawing.Point(11, 137);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(268, 241);
-            this.groupBox2.TabIndex = 12;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Opracuj pliki z logami";
             // 
             // ReaderForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(290, 500);
-            this.Controls.Add(this.groupBox2);
+            this.ClientSize = new System.Drawing.Size(491, 441);
             this.Controls.Add(this.MergeLogs);
             this.Controls.Add(this.PB_ProgressBar);
             this.Controls.Add(this.ReadData_Button);
+            this.Controls.Add(this.ClearLogList_Button);
+            this.Controls.Add(this.FileList_TextBox);
+            this.Controls.Add(this.ReadLogs_Button);
+            this.Controls.Add(this.SelectLogs_Button);
+            this.Controls.Add(this.DownloadData_Button);
             this.Controls.Add(this.DlData_GroupBox);
             this.MaximizeBox = false;
             this.Name = "ReaderForm";
@@ -213,9 +199,8 @@
             this.Text = "Tracker";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.DlData_GroupBox.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -233,7 +218,6 @@
         private System.Windows.Forms.Button ReadData_Button;
         private System.Windows.Forms.ProgressBar PB_ProgressBar;
         private System.Windows.Forms.Button MergeLogs;
-        private System.Windows.Forms.GroupBox groupBox2;
     }
 }
 
