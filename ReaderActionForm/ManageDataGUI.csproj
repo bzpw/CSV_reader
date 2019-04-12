@@ -6,8 +6,8 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{E64BF39C-2A83-4049-92AA-DD659CB3A6B4}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>ReaderActionForm</RootNamespace>
-    <AssemblyName>ReaderActionForm</AssemblyName>
+    <RootNamespace>ManageDataGUI</RootNamespace>
+    <AssemblyName>ManageDataGUI</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -110,11 +110,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\deTracker\deTracker\deTracker.csproj">
+    <ProjectReference Include="..\..\..\..\VS_Projekty\Example\BTS_reader\BTS_reader\BTS_reader.csproj">
       <Project>{2640607c-0a23-4afc-a3b6-1fd1565f8b61}</Project>
-      <Name>deTracker</Name>
+      <Name>BTS_reader</Name>
     </ProjectReference>
-    <ProjectReference Include="..\CSV_reader\CSV_reader.csproj">
+    <ProjectReference Include="..\..\..\..\VS_Projekty\Example\CSV_reader\CSV_reader\CSV_reader.csproj">
       <Project>{01011d72-b3cc-4532-b68a-a250e2d78b18}</Project>
       <Name>CSV_reader</Name>
     </ProjectReference>

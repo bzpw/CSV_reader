@@ -126,9 +126,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\deTracker\deTracker\deTracker.csproj">
+    <ProjectReference Include="..\..\..\deTracker\deTracker\BTS_reader.csproj">
       <Project>{2640607c-0a23-4afc-a3b6-1fd1565f8b61}</Project>
-      <Name>deTracker</Name>
+      <Name>BTS_reader</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
