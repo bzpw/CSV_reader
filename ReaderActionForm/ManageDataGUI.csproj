@@ -118,6 +118,10 @@
       <Project>{01011d72-b3cc-4532-b68a-a250e2d78b18}</Project>
       <Name>CSV_reader</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\..\VS_Projekty\Example\SharedLogic\SharedLogic.csproj">
+      <Project>{f5f1fdf6-adba-4f85-97eb-f539a722c22f}</Project>
+      <Name>SharedLogic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
