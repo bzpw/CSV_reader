@@ -206,6 +206,7 @@
             this.Controls.Add(this.PB_ProgressBar);
             this.Controls.Add(this.ReadData_Button);
             this.Controls.Add(this.DlData_GroupBox);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
             this.MaximizeBox = false;
             this.Name = "ReaderForm";
             this.Padding = new System.Windows.Forms.Padding(1);
